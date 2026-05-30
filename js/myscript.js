@@ -1,54 +1,235 @@
-//paste this code under the head tag or in a separate js file.
-	// Wait for window load
-	$(window).load(function() {
-		// Animate loader off screen
-		$(".se-pre-con").fadeOut("slow");;
-	});
+// --- Web3Forms Configuration ---
+// Paste your Web3Forms Access Key here:
+const WEB3FORMS_ACCESS_KEY = "5693a3ad-cc13-490f-a05c-1da11911737e";
 
-$(document).ready(function(){
-   var scroll_start = 0;
-   var startchange = $('#profile');
-   var offset = startchange.offset();
-    if (startchange.length){
-   $(document).scroll(function() {
-      scroll_start = $(this).scrollTop();
-      if(scroll_start > (offset.top-50)) {
-          $(".navbar-fixed-top").css('background-color', '#000');
-		  $(".navbar-fixed-top").css('opacity','0.9');
-		  $('.navbar-header *').css('color','#fff');
-		  $('.dropdown-menu').css('background-color','#000');
+document.addEventListener('DOMContentLoaded', () => {
 
-       } else {
-          $('.navbar-fixed-top').css('background-color', 'transparent');
-		  $('.navbar-header *').css('color','#000');
-		  $('.dropdown-menu').css('background-color','#fff');
-		  $('.navbar-brand').css('color', '#fff');
-		  $('.navbar-brand *').css('color','#fff');
-       }
-   });
+    // --- Sticky/Floating Navbar Reveal on Scroll ---
+    const navbarWrapper = document.querySelector('.navbar-wrapper');
+    const heroSection = document.getElementById('hero');
+
+    if (navbarWrapper && heroSection) {
+        const handleScroll = () => {
+            const heroHeight = heroSection.offsetHeight;
+            if (window.scrollY >= heroHeight - 200) {
+                navbarWrapper.classList.add('visible');
+            } else {
+                navbarWrapper.classList.remove('visible');
+            }
+        };
+
+        // Run on load to set initial state
+        handleScroll();
+        window.addEventListener('scroll', handleScroll, { passive: true });
     }
-});
-$(document).ready(function(){
-	$(".menu-items a").on('click', function(event){
-		if (this.hash !== "") {
-			event.preventDefault();
-			var hash = this.hash;
-			$('html, body').animate({
-				scrollTop: $(hash).offset().top
-				}, 800, function(){
-					window.location.hash = hash;
-				});
-		}
-	})
-	$("#btn-contact").on('click', function(event){
-		if (this.hash !== "") {
-			event.preventDefault();
-			var hash = this.hash;
-			$('html, body').animate({
-				scrollTop: $(hash).offset().top
-				}, 800, function(){
-					window.location.hash = hash;
-				});
-		}
-	})
+
+    // --- Mobile Menu Toggle ---
+    const nav = document.querySelector('.navbar');
+    const menuToggle = document.querySelector('.menu-toggle');
+    const navLinks = document.querySelectorAll('.nav-links a');
+
+    if (menuToggle && nav) {
+        menuToggle.addEventListener('click', () => {
+            const isOpened = menuToggle.getAttribute('aria-expanded') === 'true';
+            menuToggle.setAttribute('aria-expanded', !isOpened);
+            nav.classList.toggle('mobile-active');
+        });
+
+        // Close menu when clicking a nav link
+        navLinks.forEach(link => {
+            link.addEventListener('click', () => {
+                menuToggle.setAttribute('aria-expanded', 'false');
+                nav.classList.remove('mobile-active');
+            });
+        });
+    }
+
+    // --- Contact Form Handling & Validation ---
+    const contactForm = document.getElementById('contact-form');
+    const formName = document.getElementById('form-name');
+    const formEmail = document.getElementById('form-email');
+    const formMessage = document.getElementById('form-message');
+    const submitBtn = document.getElementById('submit-btn');
+
+    // Modals
+    const feedbackModal = document.getElementById('feedback-modal');
+    const modalCloseBtn = document.getElementById('modal-close-btn');
+    const senderNameSpan = document.getElementById('sender-name');
+
+    if (contactForm) {
+        // Validate single group
+        const validateInput = (input, validatorFn) => {
+            const group = input.closest('.form-group');
+            const isValid = validatorFn(input.value.trim());
+            if (isValid) {
+                group.classList.remove('invalid');
+            } else {
+                group.classList.add('invalid');
+            }
+            return isValid;
+        };
+
+        // Validators
+        const isNotEmpty = val => val.length > 0;
+        const isValidEmail = val => {
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            return emailRegex.test(val);
+        };
+
+        // Live input feedback (clears error states when user types)
+        [formName, formEmail, formMessage].forEach(input => {
+            input.addEventListener('input', () => {
+                const group = input.closest('.form-group');
+                group.classList.remove('invalid');
+            });
+        });
+
+        // Form Submit
+        contactForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+
+            // Run validation
+            const isNameValid = validateInput(formName, isNotEmpty);
+            const isEmailValid = validateInput(formEmail, isValidEmail);
+            const isMessageValid = validateInput(formMessage, isNotEmpty);
+
+            if (isNameValid && isEmailValid && isMessageValid) {
+                // Form is valid! Set to loading state
+                submitBtn.classList.add('loading');
+                submitBtn.disabled = true;
+                formName.disabled = true;
+                formEmail.disabled = true;
+                formMessage.disabled = true;
+
+                // Helper to reset loading state
+                const resetFormLoading = () => {
+                    submitBtn.classList.remove('loading');
+                    submitBtn.disabled = false;
+                    formName.disabled = false;
+                    formEmail.disabled = false;
+                    formMessage.disabled = false;
+                };
+
+                // Helper to show success modal
+                const showSuccess = () => {
+                    senderNameSpan.textContent = formName.value.trim();
+                    feedbackModal.classList.add('active');
+                    feedbackModal.setAttribute('aria-hidden', 'false');
+                    contactForm.reset();
+                };
+
+                // Fallback simulation if access key is not configured yet
+                if (!WEB3FORMS_ACCESS_KEY) {
+                    console.warn("Web3Forms Access Key is not set. Simulating form submission.");
+                    setTimeout(() => {
+                        resetFormLoading();
+                        showSuccess();
+                    }, 1200);
+                    return;
+                }
+
+                // Send data to Web3Forms
+                fetch("https://api.web3forms.com/submit", {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        access_key: WEB3FORMS_ACCESS_KEY,
+                        name: formName.value.trim(),
+                        email: formEmail.value.trim(),
+                        message: formMessage.value.trim()
+                    })
+                })
+                    .then(response => {
+                        if (response.ok) {
+                            return response.json();
+                        }
+                        throw new Error('Network response was not ok.');
+                    })
+                    .then(data => {
+                        resetFormLoading();
+                        if (data && data.success) {
+                            showSuccess();
+                        } else {
+                            alert("There was an error sending your message: " + (data.message || "Unknown error"));
+                        }
+                    })
+                    .catch(error => {
+                        console.error("Form submission error:", error);
+                        resetFormLoading();
+                        alert("Failed to send message. Please check your internet connection or try again later.");
+                    });
+            }
+        });
+    }
+
+    // --- Modal Management ---
+    if (feedbackModal && modalCloseBtn) {
+        const closeModal = () => {
+            feedbackModal.classList.remove('active');
+            feedbackModal.setAttribute('aria-hidden', 'true');
+        };
+
+        modalCloseBtn.addEventListener('click', closeModal);
+
+        // Click outside modal content to close
+        feedbackModal.addEventListener('click', (e) => {
+            if (e.target === feedbackModal) {
+                closeModal();
+            }
+        });
+
+        // ESC key to close
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && feedbackModal.classList.contains('active')) {
+                closeModal();
+            }
+        });
+    }
+
+    // --- Timeline Scroll-into-view Observer ---
+    const timelineItems = document.querySelectorAll('.timeline-item');
+    if (timelineItems.length > 0) {
+        const observerOptions = {
+            root: null,
+            rootMargin: '0px 0px -15% 0px',
+            threshold: 0.1
+        };
+
+        const timelineObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('in-view');
+                } else {
+                    entry.target.classList.remove('in-view');
+                }
+            });
+        }, observerOptions);
+
+        timelineItems.forEach(item => {
+            timelineObserver.observe(item);
+        });
+    }
+
+    // --- Collapsible Work Experience ---
+    const expandButtons = document.querySelectorAll('.expand-btn');
+    expandButtons.forEach(btn => {
+        btn.addEventListener('click', () => {
+            const collapsible = btn.closest('.collapsible');
+            const isExpanded = collapsible.classList.contains('expanded');
+
+            if (isExpanded) {
+                collapsible.classList.remove('expanded');
+                btn.textContent = 'Show More';
+                // Scroll back to the top of the timeline item if it goes off-screen
+                collapsible.closest('.timeline-item').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+            } else {
+                collapsible.classList.add('expanded');
+                btn.textContent = 'Show Less';
+            }
+        });
+    });
+
 });
