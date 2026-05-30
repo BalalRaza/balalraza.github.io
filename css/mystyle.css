@@ -1149,6 +1149,168 @@ body {
     }
 }
 
+/* Writing Section */
+#writing {
+    display: none; /* Starts hidden; shown via JS on success */
+}
+
+#writing.visible {
+    display: block !important;
+    animation: fadeIn 0.8s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.writing-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+}
+
+.writing-card {
+    background-color: var(--bg-secondary);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    box-shadow: var(--shadow-subtle);
+    transition: var(--transition-smooth);
+    text-decoration: none;
+    color: inherit;
+}
+
+.writing-card:hover {
+    border-color: var(--text-muted);
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-hover);
+}
+
+.writing-thumbnail-wrapper {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    overflow: hidden;
+    background-color: var(--bg-tertiary);
+    border-bottom: 1px solid var(--border-color);
+}
+
+.writing-thumbnail {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform var(--transition-smooth);
+}
+
+.writing-card:hover .writing-thumbnail {
+    transform: scale(1.04);
+}
+
+.writing-content {
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+}
+
+.writing-meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 16px;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.writing-tag {
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    padding: 4px 10px;
+    border-radius: var(--radius-pill);
+}
+
+.writing-tag.tag-indigo {
+    background-color: var(--pastel-indigo);
+    color: var(--pastel-indigo-text);
+}
+
+.writing-tag.tag-sky {
+    background-color: var(--pastel-sky);
+    color: var(--pastel-sky-text);
+}
+
+.writing-tag.tag-purple {
+    background-color: var(--pastel-purple);
+    color: var(--pastel-purple-text);
+}
+
+.writing-tag.tag-emerald {
+    background-color: var(--pastel-emerald);
+    color: var(--pastel-emerald-text);
+}
+
+.writing-tag.tag-orange {
+    background-color: var(--pastel-orange);
+    color: var(--pastel-orange-text);
+}
+
+.writing-date {
+    font-size: 0.8125rem;
+    font-weight: 600;
+    color: var(--text-muted);
+}
+
+.writing-title {
+    font-family: var(--font-title);
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin-bottom: 12px;
+    line-height: 1.4;
+    transition: var(--transition-fast);
+}
+
+.writing-card:hover .writing-title {
+    color: var(--pastel-orange-text);
+}
+
+.writing-desc {
+    font-size: 0.9375rem;
+    color: var(--text-secondary);
+    margin-bottom: 24px;
+    flex-grow: 1;
+    text-align: justify;
+    text-justify: inter-word;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    line-height: 1.5;
+}
+
+.writing-link {
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--pastel-orange-text);
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    transition: var(--transition-fast);
+}
+
+.writing-link svg {
+    transition: transform var(--transition-fast);
+}
+
+.writing-card:hover .writing-link {
+    color: var(--text-primary);
+}
+
+.writing-card:hover .writing-link svg {
+    transform: translateX(4px);
+}
+
 /* Responsive Rules */
 @media (max-width: 900px) {
     .projects-grid {
@@ -1158,6 +1320,10 @@ body {
     .education-achievements {
         grid-template-columns: 1fr;
         gap: 60px;
+    }
+
+    .writing-grid {
+        grid-template-columns: repeat(2, 1fr);
     }
 }
 
@@ -1318,7 +1484,8 @@ body {
 }
 
 @media (max-width: 580px) {
-    .projects-grid {
+    .projects-grid,
+    .writing-grid {
         grid-template-columns: 1fr;
     }
 }

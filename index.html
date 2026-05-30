@@ -29,9 +29,10 @@
         <nav class="navbar">
             <a href="#hero" class="nav-logo">MBR</a>
             <div class="nav-links">
-                <a href="#experience">Experience</a>
                 <a href="#skills">Skills</a>
+                <a href="#experience">Experience</a>
                 <a href="#projects">Projects</a>
+                <a href="#writing">Blogs</a>
                 <a href="#education">Education</a>
                 <a href="#contact">Contact</a>
             </div>
@@ -53,9 +54,10 @@
                 <header class="hero-nav">
                     <h1 class="hero-logo"><span>Md </span>Balal<span> Raza</span></h1>
                     <div class="hero-links">
-                        <a href="#experience">Experience</a>
                         <a href="#skills">Skills</a>
+                        <a href="#experience">Experience</a>
                         <a href="#projects">Projects</a>
+                        <a href="#writing">Blogs</a>
                         <a href="#education">Education</a>
                         <a href="#contact">Contact</a>
                     </div>
@@ -146,13 +148,79 @@
                     </div>
                 </div>
             </div>
-            <a href="#experience" class="hero-scroll" aria-label="Scroll to experience">
+            <a href="#skills" class="hero-scroll" aria-label="Scroll to skills">
                 <svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2" fill="none"
                     stroke-linecap="round" stroke-linejoin="round">
                     <line x1="12" y1="5" x2="12" y2="19"></line>
                     <polyline points="19 12 12 19 5 12"></polyline>
                 </svg>
             </a>
+        </section>
+
+        <!-- Skills Section -->
+        <section id="skills" class="section section-bg">
+            <div class="container">
+                <h2 class="section-title">Skills</h2>
+                <div class="skills-grid">
+
+                    <div class="skills-card">
+                        <h3 class="skills-category">Frontend & UI</h3>
+                        <div class="skills-list">
+                            <span class="skill-badge skill-primary">ReactJS</span>
+                            <span class="skill-badge skill-primary">TypeScript</span>
+                            <span class="skill-badge skill-primary">JavaScript</span>
+                            <span class="skill-badge skill-primary">Tailwind CSS</span>
+                            <span class="skill-badge">NextJS</span>
+                            <span class="skill-badge">Redux</span>
+                            <span class="skill-badge">Zustand</span>
+                            <span class="skill-badge">shadcn/ui</span>
+                            <span class="skill-badge">Material-UI</span>
+                            <span class="skill-badge">Performance Optimization</span>
+                            <span class="skill-badge">Storybook</span>
+                        </div>
+                    </div>
+
+                    <div class="skills-card">
+                        <h3 class="skills-category">Backend & Core</h3>
+                        <div class="skills-list">
+                            <span class="skill-badge skill-primary">Python (Flask)</span>
+                            <span class="skill-badge">NodeJS</span>
+                            <span class="skill-badge">REST APIs</span>
+                            <span class="skill-badge">Microservices</span>
+                            <span class="skill-badge">Algorithms</span>
+                            <span class="skill-badge">State Machines</span>
+                        </div>
+                    </div>
+
+                    <div class="skills-card">
+                        <h3 class="skills-category">Cloud & Databases</h3>
+                        <div class="skills-list">
+                            <span class="skill-badge skill-primary">DynamoDB</span>
+                            <span class="skill-badge">PostgreSQL</span>
+                            <span class="skill-badge">AWS IVS (Video)</span>
+                            <span class="skill-badge">AWS Lambda</span>
+                            <span class="skill-badge">AWS S3</span>
+                            <span class="skill-badge">AWS SQS</span>
+                            <span class="skill-badge">CloudFront</span>
+                            <span class="skill-badge">Serverless Framework</span>
+                        </div>
+                    </div>
+
+                    <div class="skills-card">
+                        <h3 class="skills-category">DevOps & Tooling</h3>
+                        <div class="skills-list">
+                            <span class="skill-badge skill-primary">CI/CD Pipelines</span>
+                            <span class="skill-badge skill-primary">Git & GitHub</span>
+                            <span class="skill-badge">TurboRepo</span>
+                            <span class="skill-badge">Docker</span>
+                            <span class="skill-badge">Cypress</span>
+                            <span class="skill-badge">MSW</span>
+                            <span class="skill-badge">Husky</span>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
         </section>
 
         <!-- Experience Section -->
@@ -305,150 +373,96 @@
             </div>
         </section>
 
-        <!-- Skills Section -->
-        <section id="skills" class="section section-bg">
+        <!-- Projects Section -->
+        <section id="projects" class="section section-bg">
             <div class="container">
-                <h2 class="section-title">Skills</h2>
-                <div class="skills-grid">
+                <h2 class="section-title">Key Projects</h2>
+                <div class="projects-grid">
 
-                    <div class="skills-card">
-                        <h3 class="skills-category">Frontend & UI</h3>
-                        <div class="skills-list">
-                            <span class="skill-badge skill-primary">ReactJS</span>
-                            <span class="skill-badge skill-primary">TypeScript</span>
-                            <span class="skill-badge skill-primary">JavaScript</span>
-                            <span class="skill-badge skill-primary">Tailwind CSS</span>
-                            <span class="skill-badge">NextJS</span>
-                            <span class="skill-badge">Redux</span>
-                            <span class="skill-badge">Zustand</span>
-                            <span class="skill-badge">shadcn/ui</span>
-                            <span class="skill-badge">Material-UI</span>
-                            <span class="skill-badge">Performance Optimization</span>
-                            <span class="skill-badge">Storybook</span>
+                    <div class="project-card">
+                        <div class="project-content">
+                            <div class="project-header">
+                                <div class="project-badge">Generative AI</div>
+                                <span class="project-date">Feb 2026 - Apr 2026</span>
+                            </div>
+                            <h3 class="project-title">AI Smart Tutor</h3>
+                            <p class="project-desc">A spatial UI-driven AI tutor facilitating step-by-step math problem
+                                solving. Built with React and canvas scaffolding engines offering dynamic, real-time
+                                feedback and hints.</p>
+                            <div class="project-tags">
+                                <span>React</span>
+                                <span>Zustand</span>
+                                <span>Gen-AI</span>
+                                <span>Canvas API</span>
+                            </div>
                         </div>
                     </div>
 
-                    <div class="skills-card">
-                        <h3 class="skills-category">Backend & Core</h3>
-                        <div class="skills-list">
-                            <span class="skill-badge skill-primary">Python (Flask)</span>
-                            <span class="skill-badge">NodeJS</span>
-                            <span class="skill-badge">REST APIs</span>
-                            <span class="skill-badge">Microservices</span>
-                            <span class="skill-badge">Algorithms</span>
-                            <span class="skill-badge">State Machines</span>
+                    <div class="project-card">
+                        <div class="project-content">
+                            <div class="project-header">
+                                <div class="project-badge">Streaming</div>
+                                <span class="project-date">Jan 2025 - May 2025</span>
+                            </div>
+                            <h3 class="project-title">IVS Classroom Platform</h3>
+                            <p class="project-desc">High-concurrency virtual classroom system serving 5,000+ concurrent
+                                students. Delivers whiteboard, PIP, chats, and breakout rooms via AWS Interactive Video
+                                Service.</p>
+                            <div class="project-tags">
+                                <span>AWS IVS</span>
+                                <span>React</span>
+                                <span>NodeJS</span>
+                                <span>WebSockets</span>
+                            </div>
                         </div>
                     </div>
 
-                    <div class="skills-card">
-                        <h3 class="skills-category">Cloud & Databases</h3>
-                        <div class="skills-list">
-                            <span class="skill-badge skill-primary">DynamoDB</span>
-                            <span class="skill-badge">PostgreSQL</span>
-                            <span class="skill-badge">AWS IVS (Video)</span>
-                            <span class="skill-badge">AWS Lambda</span>
-                            <span class="skill-badge">AWS S3</span>
-                            <span class="skill-badge">AWS SQS</span>
-                            <span class="skill-badge">CloudFront</span>
-                            <span class="skill-badge">Serverless Framework</span>
+                    <div class="project-card">
+                        <div class="project-content">
+                            <div class="project-header">
+                                <div class="project-badge">Agentic AI</div>
+                                <span class="project-date">Sep 2025 - Oct 2025</span>
+                            </div>
+                            <h3 class="project-title">AI Outreach Voice Agent</h3>
+                            <p class="project-desc">Low-latency pipeline integrating LLMs with backend telephony for
+                                automated outreach, demo scheduling, and parental follow-ups, replacing ~40% of manual
+                                processes.</p>
+                            <div class="project-tags">
+                                <span>LLM</span>
+                                <span>Python</span>
+                                <span>AWS SQS</span>
+                                <span>Telephony</span>
+                            </div>
                         </div>
                     </div>
 
-                    <div class="skills-card">
-                        <h3 class="skills-category">DevOps & Tooling</h3>
-                        <div class="skills-list">
-                            <span class="skill-badge skill-primary">CI/CD Pipelines</span>
-                            <span class="skill-badge skill-primary">Git & GitHub</span>
-                            <span class="skill-badge">TurboRepo</span>
-                            <span class="skill-badge">Docker</span>
-                            <span class="skill-badge">Cypress</span>
-                            <span class="skill-badge">MSW</span>
-                            <span class="skill-badge">Husky</span>
+                    <div class="project-card">
+                        <div class="project-content">
+                            <div class="project-header">
+                                <div class="project-badge">Fintech</div>
+                                <span class="project-date">Sep 2017 - Nov 2018</span>
+                            </div>
+                            <h3 class="project-title">Focus App</h3>
+                            <p class="project-desc">A React Native mobile application for transaction categorization, budget
+                                tracking, and real-time financial advice powered by smart rules.</p>
+                            <div class="project-tags">
+                                <span>React Native</span>
+                                <span>Redux</span>
+                                <span>NodeJS</span>
+                                <span>MongoDB</span>
+                            </div>
                         </div>
                     </div>
-
                 </div>
             </div>
         </section>
 
-        <!-- Projects Section -->
-        <section id="projects" class="section container">
-            <h2 class="section-title">Key Projects</h2>
-            <div class="projects-grid">
-
-                <div class="project-card">
-                    <div class="project-content">
-                        <div class="project-header">
-                            <div class="project-badge">Generative AI</div>
-                            <span class="project-date">Feb 2026 - Apr 2026</span>
-                        </div>
-                        <h3 class="project-title">AI Smart Tutor</h3>
-                        <p class="project-desc">A spatial UI-driven AI tutor facilitating step-by-step math problem
-                            solving. Built with React and canvas scaffolding engines offering dynamic, real-time
-                            feedback and hints.</p>
-                        <div class="project-tags">
-                            <span>React</span>
-                            <span>Zustand</span>
-                            <span>Gen-AI</span>
-                            <span>Canvas API</span>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="project-card">
-                    <div class="project-content">
-                        <div class="project-header">
-                            <div class="project-badge">Streaming</div>
-                            <span class="project-date">Jan 2025 - May 2025</span>
-                        </div>
-                        <h3 class="project-title">IVS Classroom Platform</h3>
-                        <p class="project-desc">High-concurrency virtual classroom system serving 5,000+ concurrent
-                            students. Delivers whiteboard, PIP, chats, and breakout rooms via AWS Interactive Video
-                            Service.</p>
-                        <div class="project-tags">
-                            <span>AWS IVS</span>
-                            <span>React</span>
-                            <span>NodeJS</span>
-                            <span>WebSockets</span>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="project-card">
-                    <div class="project-content">
-                        <div class="project-header">
-                            <div class="project-badge">Agentic AI</div>
-                            <span class="project-date">Sep 2025 - Oct 2025</span>
-                        </div>
-                        <h3 class="project-title">AI Outreach Voice Agent</h3>
-                        <p class="project-desc">Low-latency pipeline integrating LLMs with backend telephony for
-                            automated outreach, demo scheduling, and parental follow-ups, replacing ~40% of manual
-                            processes.</p>
-                        <div class="project-tags">
-                            <span>LLM</span>
-                            <span>Python</span>
-                            <span>AWS SQS</span>
-                            <span>Telephony</span>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="project-card">
-                    <div class="project-content">
-                        <div class="project-header">
-                            <div class="project-badge">Fintech</div>
-                            <span class="project-date">Sep 2017 - Nov 2018</span>
-                        </div>
-                        <h3 class="project-title">Focus App</h3>
-                        <p class="project-desc">A React Native mobile application for transaction categorization, budget
-                            tracking, and real-time financial advice powered by smart rules.</p>
-                        <div class="project-tags">
-                            <span>React Native</span>
-                            <span>Redux</span>
-                            <span>NodeJS</span>
-                            <span>MongoDB</span>
-                        </div>
-                    </div>
+        <!-- Writing Section -->
+        <section id="writing" class="section">
+            <div class="container">
+                <h2 class="section-title">Latest Articles</h2>
+                <div class="writing-grid" id="writing-grid">
+                    <!-- Cards dynamic injection -->
                 </div>
             </div>
         </section>
@@ -456,34 +470,6 @@
         <!-- Education & Achievements Section -->
         <section id="education" class="section section-bg">
             <div class="container education-achievements">
-
-                <div class="column-block">
-                    <h2 class="section-title left-align">Education</h2>
-                    <div class="edu-card-stack">
-
-                        <div class="edu-card">
-                            <span class="edu-year">2013 - 2017</span>
-                            <h3 class="edu-degree">B.Tech in Computer Science & Engineering</h3>
-                            <h4 class="edu-school">Narula Institute of Technology</h4>
-                            <p class="edu-details">Graduated with a CGPA of 8.16 / 10. Kolkata, India.</p>
-                        </div>
-
-                        <div class="edu-card">
-                            <span class="edu-year">2011 - 2012</span>
-                            <h3 class="edu-degree">ISC (12th Standard)</h3>
-                            <h4 class="edu-school">Modern English Academy</h4>
-                            <p class="edu-details">Completed with 83.5%. Barrackpore, India.</p>
-                        </div>
-
-                        <div class="edu-card">
-                            <span class="edu-year">2010</span>
-                            <h3 class="edu-degree">ICSE (10th Standard)</h3>
-                            <h4 class="edu-school">Modern English Academy</h4>
-                            <p class="edu-details">Completed with 84.5%. Barrackpore, India.</p>
-                        </div>
-
-                    </div>
-                </div>
 
                 <div class="column-block">
                     <h2 class="section-title left-align">Awards & Highlights</h2>
@@ -525,46 +511,76 @@
                     </div>
                 </div>
 
+                <div class="column-block">
+                    <h2 class="section-title left-align">Education</h2>
+                    <div class="edu-card-stack">
+
+                        <div class="edu-card">
+                            <span class="edu-year">2013 - 2017</span>
+                            <h3 class="edu-degree">B.Tech in Computer Science & Engineering</h3>
+                            <h4 class="edu-school">Narula Institute of Technology</h4>
+                            <p class="edu-details">Graduated with a CGPA of 8.16 / 10. Kolkata, India.</p>
+                        </div>
+
+                        <div class="edu-card">
+                            <span class="edu-year">2011 - 2012</span>
+                            <h3 class="edu-degree">ISC (12th Standard)</h3>
+                            <h4 class="edu-school">Modern English Academy</h4>
+                            <p class="edu-details">Completed with 83.5%. Barrackpore, India.</p>
+                        </div>
+
+                        <div class="edu-card">
+                            <span class="edu-year">2010</span>
+                            <h3 class="edu-degree">ICSE (10th Standard)</h3>
+                            <h4 class="edu-school">Modern English Academy</h4>
+                            <p class="edu-details">Completed with 84.5%. Barrackpore, India.</p>
+                        </div>
+
+                    </div>
+                </div>
+
             </div>
         </section>
 
         <!-- Contact Section -->
-        <section id="contact" class="section container">
-            <div class="contact-wrapper">
-                <h2 class="section-title">Get In Touch</h2>
-                <p class="contact-subtitle">Have a project, job opening, or idea to discuss? Drop a message below.</p>
+        <section id="contact" class="section">
+            <div class="container">
+                <div class="contact-wrapper">
+                    <h2 class="section-title">Get In Touch</h2>
+                    <p class="contact-subtitle">Have a project, job opening, or idea to discuss? Drop a message below.</p>
 
-                <form id="contact-form" class="contact-form" novalidate>
-                    <div class="form-group">
-                        <label for="form-name">Name</label>
-                        <input type="text" id="form-name" name="name" placeholder="John Doe" required>
-                        <span class="error-msg" id="error-name">Please enter your name.</span>
-                    </div>
+                    <form id="contact-form" class="contact-form" novalidate>
+                        <div class="form-group">
+                            <label for="form-name">Name</label>
+                            <input type="text" id="form-name" name="name" placeholder="John Doe" required>
+                            <span class="error-msg" id="error-name">Please enter your name.</span>
+                        </div>
 
-                    <div class="form-group">
-                        <label for="form-email">Email</label>
-                        <input type="email" id="form-email" name="email" placeholder="john@example.com" required>
-                        <span class="error-msg" id="error-email">Please enter a valid email address.</span>
-                    </div>
+                        <div class="form-group">
+                            <label for="form-email">Email</label>
+                            <input type="email" id="form-email" name="email" placeholder="john@example.com" required>
+                            <span class="error-msg" id="error-email">Please enter a valid email address.</span>
+                        </div>
 
-                    <div class="form-group">
-                        <label for="form-message">Message</label>
-                        <textarea id="form-message" name="message" rows="5"
-                            placeholder="Hi Balal, I'm looking for a co-founder..." required></textarea>
-                        <span class="error-msg" id="error-message">Please enter your message.</span>
-                    </div>
+                        <div class="form-group">
+                            <label for="form-message">Message</label>
+                            <textarea id="form-message" name="message" rows="5"
+                                placeholder="Hi Balal, I'm looking for a co-founder..." required></textarea>
+                            <span class="error-msg" id="error-message">Please enter your message.</span>
+                        </div>
 
-                    <button type="submit" class="submit-btn" id="submit-btn">
-                        <span class="btn-text">Send Message</span>
-                        <span class="btn-loader">
-                            <svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="3"
-                                fill="none">
-                                <circle cx="12" cy="12" r="10" stroke-opacity="0.25"></circle>
-                                <path d="M12 2a10 10 0 0 1 10 10" stroke-linecap="round"></path>
-                            </svg>
-                        </span>
-                    </button>
-                </form>
+                        <button type="submit" class="submit-btn" id="submit-btn">
+                            <span class="btn-text">Send Message</span>
+                            <span class="btn-loader">
+                                <svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="3"
+                                    fill="none">
+                                    <circle cx="12" cy="12" r="10" stroke-opacity="0.25"></circle>
+                                    <path d="M12 2a10 10 0 0 1 10 10" stroke-linecap="round"></path>
+                                </svg>
+                            </span>
+                        </button>
+                    </form>
+                </div>
             </div>
         </section>
     </main>

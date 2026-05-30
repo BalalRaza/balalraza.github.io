@@ -2,6 +2,9 @@
 // Paste your Web3Forms Access Key here:
 const WEB3FORMS_ACCESS_KEY = "5693a3ad-cc13-490f-a05c-1da11911737e";
 
+// --- Medium Integration Configuration ---
+const MEDIUM_USERNAME = "emdibee";
+
 document.addEventListener('DOMContentLoaded', () => {
 
     // --- Sticky/Floating Navbar Reveal on Scroll ---
@@ -231,5 +234,120 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
     });
+
+    // --- Fetch & Render Medium Posts ---
+    const fetchMediumPosts = () => {
+        const writingSection = document.getElementById('writing');
+        const writingGrid = document.getElementById('writing-grid');
+
+        if (!writingSection || !writingGrid || !MEDIUM_USERNAME) return;
+
+        // Use rss2json API to fetch Medium RSS feed as JSON
+        const rssFeedUrl = `https://medium.com/feed/@${MEDIUM_USERNAME}`;
+        const apiUrl = `https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(rssFeedUrl)}`;
+
+        fetch(apiUrl)
+            .then(response => {
+                if (!response.ok) throw new Error('Failed to fetch RSS feed');
+                return response.json();
+            })
+            .then(data => {
+                if (data.status !== 'ok' || !data.items || data.items.length === 0) {
+                    throw new Error('No items found or status not ok');
+                }
+
+                // Slice the most recent 3 posts
+                const posts = data.items.slice(0, 3);
+                writingGrid.innerHTML = ''; // Clear skeleton or default text
+
+                const tagClasses = ['tag-indigo', 'tag-sky', 'tag-purple', 'tag-emerald', 'tag-orange'];
+
+                posts.forEach((post, index) => {
+                    // Extract tag/category
+                    const rawTag = (post.categories && post.categories.length > 0) ? post.categories[0] : 'Article';
+                    const tagClass = tagClasses[index % tagClasses.length];
+
+                    // Format Date
+                    let formattedDate = 'Recent';
+                    if (post.pubDate) {
+                        // Replace dashes with slashes for cross-browser compatibility
+                        const dateObj = new Date(post.pubDate.replace(/-/g, '/'));
+                        if (!isNaN(dateObj.getTime())) {
+                            formattedDate = dateObj.toLocaleDateString('en-US', {
+                                month: 'short',
+                                day: 'numeric',
+                                year: 'numeric'
+                            });
+                        }
+                    }
+
+                    // Format & clean description snippet
+                    let description = '';
+                    if (post.description) {
+                        description = post.description
+                            .replace(/<[^>]*>/g, '') // strip HTML
+                            .replace(/\s+/g, ' ')    // normalize spacing
+                            .trim();
+                        // Truncate to a reasonable character length for a snippet
+                        if (description.length > 140) {
+                            description = description.slice(0, 137) + '...';
+                        }
+                    }
+
+                    // Card template
+                    const card = document.createElement('a');
+                    card.href = post.link;
+                    card.target = '_blank';
+                    card.rel = 'noopener noreferrer';
+                    card.className = 'writing-card';
+
+                    // Extract thumbnail from post content if API thumbnail is empty
+                    let thumbnailSrc = post.thumbnail;
+                    if (!thumbnailSrc) {
+                        const imgMatch = (post.description || post.content || '').match(/<img[^>]+src=["']([^"']+)["']/i);
+                        if (imgMatch) {
+                            thumbnailSrc = imgMatch[1];
+                        }
+                    }
+
+                    // Thumbnail image element (with fallback if missing)
+                    const thumbnailHtml = thumbnailSrc 
+                        ? `<img src="${thumbnailSrc}" alt="${post.title}" class="writing-thumbnail" loading="lazy">`
+                        : `<div class="writing-thumbnail-fallback"></div>`;
+
+                    card.innerHTML = `
+                        <div class="writing-thumbnail-wrapper">
+                            ${thumbnailHtml}
+                        </div>
+                        <div class="writing-content">
+                            <div class="writing-meta">
+                                <span class="writing-tag ${tagClass}">${rawTag}</span>
+                                <span class="writing-date">${formattedDate}</span>
+                            </div>
+                            <h3 class="writing-title">${post.title}</h3>
+                            <p class="writing-desc">${description}</p>
+                            <span class="writing-link">
+                                Read on Medium
+                                <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                    <line x1="5" y1="12" x2="19" y2="12"></line>
+                                    <polyline points="12 5 19 12 12 19"></polyline>
+                                </svg>
+                            </span>
+                        </div>
+                    `;
+
+                    writingGrid.appendChild(card);
+                });
+
+                // On success, reveal the section with fade-in animation
+                writingSection.classList.add('visible');
+            })
+            .catch(err => {
+                console.warn('Medium posts fetch failed. Keeping section hidden. Error:', err);
+                // Section remains hidden (display: none)
+            });
+    };
+
+    fetchMediumPosts();
 
 });
