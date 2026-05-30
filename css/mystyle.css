@@ -891,16 +891,187 @@ body {
 }
 
 /* Contact Section */
-.contact-wrapper {
+.contact-header {
     max-width: 600px;
-    margin: 0 auto;
+    margin: 0 auto 48px auto;
     text-align: center;
 }
 
 .contact-subtitle {
     font-size: 1.0625rem;
     color: var(--text-secondary);
-    margin-bottom: 40px;
+    margin-bottom: 24px;
+}
+
+.contact-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 48px;
+    align-items: stretch;
+    max-width: 960px;
+    margin: 0 auto;
+}
+
+/* Schedule Card (Left Column) */
+.contact-schedule {
+    width: 100%;
+}
+
+.schedule-card {
+    background-color: var(--bg-secondary);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
+    padding: 32px;
+    box-shadow: var(--shadow-subtle);
+    transition: var(--transition-smooth);
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    text-align: left;
+    height: 100%;
+    justify-content: center;
+}
+
+.schedule-card:hover {
+    border-color: var(--text-muted);
+    box-shadow: var(--shadow-hover);
+    transform: translateY(-2px);
+}
+
+.schedule-card-header {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.schedule-badge {
+    align-self: flex-start;
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    padding: 4px 10px;
+    border-radius: var(--radius-pill);
+    background-color: var(--pastel-orange);
+    color: var(--pastel-orange-text);
+}
+
+.schedule-badge.badge-blue {
+    background-color: var(--pastel-sky);
+    color: var(--pastel-sky-text);
+}
+
+.schedule-card-title {
+    font-family: var(--font-title);
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--text-primary);
+}
+
+.schedule-desc {
+    font-size: 0.9375rem;
+    line-height: 1.6;
+    color: var(--text-secondary);
+}
+
+.schedule-topics {
+    list-style: none;
+    padding: 0;
+}
+
+.schedule-topics li {
+    font-size: 0.875rem;
+    color: var(--text-secondary);
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.schedule-topics li span {
+    font-size: 1rem;
+}
+
+.schedule-details {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    border-top: 1px solid var(--border-color);
+    border-bottom: 1px solid var(--border-color);
+    padding: 16px 0;
+}
+
+.detail-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 0.875rem;
+    color: var(--text-secondary);
+}
+
+.detail-item svg {
+    color: var(--text-muted);
+    flex-shrink: 0;
+}
+
+#calendar-button-target {
+    width: 100%;
+}
+
+#calendar-button-target button {
+    width: 100% !important;
+    background-color: var(--btn-primary-bg) !important;
+    color: var(--btn-primary-text) !important;
+    border: none !important;
+    border-radius: var(--radius-sm) !important;
+    padding: 16px !important;
+    font-family: var(--font-sans) !important;
+    font-size: 0.95rem !important;
+    font-weight: 600 !important;
+    cursor: pointer !important;
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+    transition: var(--transition-fast) !important;
+    box-shadow: none !important;
+}
+
+#calendar-button-target button:hover {
+    background-color: var(--btn-primary-hover) !important;
+}
+
+/* Right Column (Form Card) */
+.contact-form-wrapper {
+    width: 100%;
+    background-color: var(--bg-secondary);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
+    padding: 32px;
+    box-shadow: var(--shadow-subtle);
+    transition: var(--transition-smooth);
+    display: flex;
+    flex-direction: column;
+    text-align: left;
+    height: 100%;
+    justify-content: center;
+}
+
+.contact-form-wrapper:hover {
+    border-color: var(--text-muted);
+    box-shadow: var(--shadow-hover);
+    transform: translateY(-2px);
+}
+
+.contact-form-wrapper .form-group input,
+.contact-form-wrapper .form-group textarea {
+    background-color: var(--bg-primary);
+}
+
+@media (max-width: 768px) {
+    .contact-grid {
+        grid-template-columns: 1fr;
+        gap: 36px;
+    }
 }
 
 .contact-form {

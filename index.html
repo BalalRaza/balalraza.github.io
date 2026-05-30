@@ -18,6 +18,10 @@
     <!-- Custom CSS -->
     <link rel="stylesheet" href="css/mystyle.css">
 
+    <!-- Google Calendar Appointment Scheduling -->
+    <link href="https://calendar.google.com/calendar/scheduling-button-script.css" rel="stylesheet">
+    <script src="https://calendar.google.com/calendar/scheduling-button-script.js" async></script>
+
     <!-- Custom JS -->
     <script src="js/myscript.js" defer></script>
 </head>
@@ -443,7 +447,8 @@
                                 <span class="project-date">Sep 2017 - Nov 2018</span>
                             </div>
                             <h3 class="project-title">Focus App</h3>
-                            <p class="project-desc">A React Native mobile application for transaction categorization, budget
+                            <p class="project-desc">A React Native mobile application for transaction categorization,
+                                budget
                                 tracking, and real-time financial advice powered by smart rules.</p>
                             <div class="project-tags">
                                 <span>React Native</span>
@@ -545,41 +550,89 @@
         <!-- Contact Section -->
         <section id="contact" class="section">
             <div class="container">
-                <div class="contact-wrapper">
+                <div class="contact-header">
                     <h2 class="section-title">Get In Touch</h2>
-                    <p class="contact-subtitle">Have a project, job opening, or idea to discuss? Drop a message below.</p>
-
-                    <form id="contact-form" class="contact-form" novalidate>
-                        <div class="form-group">
-                            <label for="form-name">Name</label>
-                            <input type="text" id="form-name" name="name" placeholder="John Doe" required>
-                            <span class="error-msg" id="error-name">Please enter your name.</span>
+                    <p class="contact-subtitle">Have a project, job opening, or idea to discuss? Choose a path below.
+                    </p>
+                </div>
+                <div class="contact-grid">
+                    <!-- Left Column: Google Calendar 1:1 Scheduler -->
+                    <div class="contact-schedule">
+                        <div class="schedule-card">
+                            <div class="schedule-card-header">
+                                <span class="schedule-badge">1:1 Sync</span>
+                                <h3 class="schedule-card-title">Schedule a Call</h3>
+                            </div>
+                            <p class="schedule-desc">
+                                Grab a slot directly on my calendar to talk with me. It could be anything!
+                            </p>
+                            <ul class="schedule-topics">
+                                <li><span>💡</span> Agentic AI</li>
+                                <li><span>⚡</span> Frontend Engineering</li>
+                                <li><span>🗣️</span> Real-time Voice & Streaming</li>
+                                <li><span>🤝</span> Networking & Mentorship</li>
+                            </ul>
+                            <div class="schedule-details">
+                                <div class="detail-item">
+                                    <svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor"
+                                        stroke-width="2" fill="none">
+                                        <circle cx="12" cy="12" r="10"></circle>
+                                        <polyline points="12 6 12 12 16 14"></polyline>
+                                    </svg>
+                                    <span>30 mins</span>
+                                </div>
+                                <div class="detail-item">
+                                    <svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor"
+                                        stroke-width="2" fill="none">
+                                        <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+                                    </svg>
+                                    <span>Google Meet Video call</span>
+                                </div>
+                            </div>
+                            <!-- Google's official scheduling button -->
+                            <div id="calendar-button-target"></div>
                         </div>
+                    </div>
 
-                        <div class="form-group">
-                            <label for="form-email">Email</label>
-                            <input type="email" id="form-email" name="email" placeholder="john@example.com" required>
-                            <span class="error-msg" id="error-email">Please enter a valid email address.</span>
+                    <!-- Right Column: Direct Message Form -->
+                    <div class="contact-form-wrapper">
+                        <div class="schedule-card-header" style="margin-bottom: 24px;">
+                            <span class="schedule-badge badge-blue">Direct Mail</span>
+                            <h3 class="schedule-card-title">Send a Message</h3>
                         </div>
+                        <form id="contact-form" class="contact-form" novalidate>
+                            <div class="form-group">
+                                <label for="form-name">Name</label>
+                                <input type="text" id="form-name" name="name" placeholder="John Doe" required>
+                                <span class="error-msg" id="error-name">Please enter your name.</span>
+                            </div>
 
-                        <div class="form-group">
-                            <label for="form-message">Message</label>
-                            <textarea id="form-message" name="message" rows="5"
-                                placeholder="Hi Balal, I'm looking for a co-founder..." required></textarea>
-                            <span class="error-msg" id="error-message">Please enter your message.</span>
-                        </div>
+                            <div class="form-group">
+                                <label for="form-email">Email</label>
+                                <input type="email" id="form-email" name="email" placeholder="john@example.com"
+                                    required>
+                                <span class="error-msg" id="error-email">Please enter a valid email address.</span>
+                            </div>
 
-                        <button type="submit" class="submit-btn" id="submit-btn">
-                            <span class="btn-text">Send Message</span>
-                            <span class="btn-loader">
-                                <svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="3"
-                                    fill="none">
-                                    <circle cx="12" cy="12" r="10" stroke-opacity="0.25"></circle>
-                                    <path d="M12 2a10 10 0 0 1 10 10" stroke-linecap="round"></path>
-                                </svg>
-                            </span>
-                        </button>
-                    </form>
+                            <div class="form-group">
+                                <label for="form-message">Message</label>
+                                <textarea id="form-message" name="message" rows="5"
+                                    placeholder="Hi Balal, I'm looking for a co-founder..." required></textarea>
+                                <span class="error-msg" id="error-message">Please enter your message.</span>
+                            </div>
+
+                            <button type="submit" class="submit-btn" id="submit-btn">
+                                <span class="btn-text">Send Message</span>
+                                <span class="btn-loader">
+                                    <svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor"
+                                        stroke-width="3" fill="none">
+                                        <circle cx="12" cy="12" r="10" stroke-opacity="0.25"></circle>
+                                        <path d="M12 2a10 10 0 0 1 10 10" stroke-linecap="round"></path>
+                                    </svg>
+                                </span>
+                            </button>
+                        </form>
+                    </div>
                 </div>
             </div>
         </section>

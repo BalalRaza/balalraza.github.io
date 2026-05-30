@@ -350,4 +350,33 @@ document.addEventListener('DOMContentLoaded', () => {
 
     fetchMediumPosts();
 
+    // --- Google Calendar Appointment Scheduling Integration ---
+    const initGoogleCalendar = () => {
+        const calendarTarget = document.getElementById('calendar-button-target');
+
+        if (!calendarTarget) return;
+
+        // Function to initialize Google Calendar Button when script is loaded
+        const loadGoogleCalendarButton = () => {
+            if (window.calendar && window.calendar.schedulingButton) {
+                window.calendar.schedulingButton.load({
+                    url: 'https://calendar.app.google/zHc5ubnp19WMWe9o8',
+                    color: '#1E1C1A',
+                    label: 'Book a Slot',
+                    target: calendarTarget,
+                });
+            }
+        };
+
+        // Try to load button
+        if (window.calendar && window.calendar.schedulingButton) {
+            loadGoogleCalendarButton();
+        } else {
+            // Check when the window is fully loaded (if script tags are async)
+            window.addEventListener('load', loadGoogleCalendarButton);
+        }
+    };
+
+    initGoogleCalendar();
+
 });
