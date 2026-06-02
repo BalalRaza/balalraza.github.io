@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description"
+        content="Enterprise AI Voice Automation Pipeline case study - System Design & Unit Economics by Md Balal Raza.">
+    <title>Enterprise AI Voice Automation Pipeline | Md Balal Raza</title>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="../../css/mystyle.css">
+</head>
+
+<body class="subpage-body">
+
+    <!-- Static Navigation -->
+    <header class="subpage-navbar-wrapper">
+        <nav class="subpage-navbar">
+            <a href="../../" class="nav-logo">MBR</a>
+            <div class="nav-links">
+                <a href="../../#case-study">Case Studies</a>
+                <a href="../../#experience">Experience</a>
+                <a href="../../#doctrine">Doctrine</a>
+                <a href="../../#contact">Contact</a>
+            </div>
+        </nav>
+    </header>
+
+    <main class="container subpage-main">
+        <div class="back-link-wrapper">
+            <a href="../../" class="back-link">&larr; Back to Home</a>
+        </div>
+
+        <header class="solution-header">
+            <span class="solution-label">PRODUCTION CASE STUDY // BUILT AT BHANZU</span>
+            <h1 class="solution-title">Enterprise AI Voice Automation Pipeline</h1>
+            <p class="solution-subtitle">Automating parent outreach & scheduling with low-latency event-driven bidirectional WebSockets</p>
+        </header>
+
+        <section class="solution-section">
+            <h2 class="solution-section-title">System Design &amp; Data Orchestration</h2>
+            <p class="solution-text">
+                To solve expensive operational bottlenecks in mid-funnel demo reminders and rescheduling, we engineered a bidirectional event-driven WebSocket system. By moving from high-overhead human outreach to a low-latency multi-model stream loop, we automate workflows deterministically at scale.
+            </p>
+
+            <div class="architecture-flow">
+                <div class="flow-step">
+                    <h3>1. Telephony Initialization</h3>
+                    <p>Twilio triggers <code>/incoming-call</code> or <code>/outgoing-call</code> webhooks, establishing a persistent, bidirectional WebSocket handling raw G.711 audio payloads.</p>
+                </div>
+                <div class="flow-step">
+                    <h3>2. Low-Latency STT Loop</h3>
+                    <p>Inbound audio streams straight to <strong>Deepgram Flux</strong> for Speech-to-Text over WebSockets. Text tokens stream immediately to our custom LLM orchestration layer.</p>
+                </div>
+                <div class="flow-step">
+                    <h3>3. Custom Barge-In Engine</h3>
+                    <p>When user interruption (barge-in) is detected by STT, the orchestration layer immediately wipes the outgoing audio queue on the Twilio media stream, allowing natural conversation pacing.</p>
+                </div>
+                <div class="flow-step">
+                    <h3>4. GPT-4o-mini &amp; Parallel Tool Calling</h3>
+                    <p>The LLM dynamically executes parallel tool calls against internal CRM APIs to retrieve and update customer context without human error:</p>
+                    <ul class="tool-calls-list">
+                        <li><code>getUserProfileByMobileNumber</code> &mdash; Looks up student/trial history using the incoming ANI.</li>
+                        <li><code>getBatchDetails</code> &mdash; Pulls live inventory states from the internal scheduling engine.</li>
+                        <li><code>getAvailableSlotsForDay</code> &mdash; Enables conflict-free scheduling mutations.</li>
+                    </ul>
+                </div>
+                <div class="flow-step">
+                    <h3>5. Voice Synthesis &amp; Streaming Response</h3>
+                    <p>Response tokens stream directly to <strong>Deepgram Aura-2</strong> (TTS), feeding raw binary audio buffers back to the Twilio media stream to maintain an end-to-end target latency under <strong>900ms</strong>.</p>
+                </div>
+            </div>
+
+            <!-- Flowchart Container for Subsequent Agent Animation -->
+            <div class="flowchart-section">
+                <h3 class="flowchart-title">Visual Request Pipeline</h3>
+                <p class="flowchart-desc">Interactive live view of request packets navigating between servers.</p>
+                <div id="voice-bot-flowchart-container" class="flowchart-container">
+                    <!-- Target for subsequent agent's animated flowchart -->
+                    <div class="flowchart-placeholder">
+                        <div class="pulse-ring"></div>
+                        <div class="placeholder-icon">🤖</div>
+                        <p class="placeholder-text">Animated request flow visualization loading...</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="solution-section">
+            <h2 class="solution-section-title">Production-Grade Interaction Features</h2>
+            <p class="solution-text">
+                To move beyond simple "AI wrappers" and achieve native, human-like voice conversations, the pipeline incorporates specialized low-latency interaction handling:
+            </p>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">🎙️</div>
+                    <h3 class="feature-title">Smart Barge-In &amp; Interruption Detection</h3>
+                    <p class="feature-desc">
+                        Conversations aren't strictly turn-based. If a parent starts speaking mid-sentence, the <strong>STT websocket</strong> registers speech inputs, triggering an immediate media stream queue wipe. The orchestrator halts the active TTS synthesis loop, listens to the interruption, and re-calibrates the LLM context dynamically to answer.
+                    </p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🌐</div>
+                    <h3 class="feature-title">Multilingual Talkback &amp; Hinglish Support</h3>
+                    <p class="feature-desc">
+                        Designed specifically for localized demographic outreach. The pipeline uses system prompt formatting to support seamless multilingual conversations, switching dynamically between <strong>English, Hindi, and mixed Hinglish</strong> dialects without context drifts or translation overhead.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <section class="solution-section">
+            <h2 class="solution-section-title">Rigorous Unit Economics</h2>
+            <p class="solution-text">
+                By automating calling operations, we transitioned from high fixed labor expenses to lean usage-based APIs. Here is the exact cost mapping for a typical 3-minute operational call in the India market context:
+            </p>
+
+            <div class="table-wrapper">
+                <table class="economics-table">
+                    <thead>
+                        <tr>
+                            <th>Expense Vector</th>
+                            <th>Human Agent Baseline</th>
+                            <th>Automated AI Pipeline</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Primary Variable</strong></td>
+                            <td>Avg Salary: ₹25,000/mo.<br><span class="table-subtext">Capacity: ~2,000 clean calls/mo.</span></td>
+                            <td>Twilio Inbound/Outbound:<br><span class="table-subtext">~₹0.65 - ₹0.80/min</span></td>
+                        </tr>
+                        <tr>
+                            <td><strong>Transcription / Inference</strong></td>
+                            <td>N/A</td>
+                            <td>Deepgram Flux STT: ₹1.90<br>GPT-4o-mini Processing: ₹0.07</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Voice Synthesis</strong></td>
+                            <td>N/A</td>
+                            <td>Deepgram Aura-2 TTS: ₹3.00</td>
+                        </tr>
+                        <tr class="table-highlight">
+                            <td><strong>Blended Total Cost</strong></td>
+                            <td><strong>₹12.50 &ndash; ₹15.00 per call</strong></td>
+                            <td><strong>~₹7.07 per 3-min call</strong></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <section class="solution-section">
+            <h2 class="solution-section-title">Business Impact Summary</h2>
+            <div class="impact-grid">
+                <div class="impact-card">
+                    <span class="impact-stat">30%</span>
+                    <span class="impact-label">Operational Headcount Reduction</span>
+                    <p class="impact-desc">Automated mid-funnel parent outreach (MOFU) within Q1 of deployment, shifting operations agents to high-tier queries.</p>
+                </div>
+                <div class="impact-card">
+                    <span class="impact-stat">100%</span>
+                    <span class="impact-label">CRM Data Entry Integrity</span>
+                    <p class="impact-desc">All demo rescheduling, slot confirmations, and student statuses are directly mutated via APIs, eliminating manual logging error rates.</p>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <div class="container footer-content">
+            <p>Md Balal Raza &copy; 2026. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <!-- Flowchart Script -->
+    <script src="../../js/flowchart.js" defer></script>
+</body>
+
+</html>
