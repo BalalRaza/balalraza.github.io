@@ -1023,12 +1023,13 @@ body {
     background-color: var(--bg-primary);
     border: 1px dashed var(--text-muted);
     border-radius: var(--radius-md);
-    height: 420px;
     display: flex;
+    flex-direction: column;
     align-items: center;
     justify-content: center;
     position: relative;
-    overflow: hidden;
+    padding: 32px 24px;
+    min-height: 450px;
 }
 
 .flowchart-placeholder {
