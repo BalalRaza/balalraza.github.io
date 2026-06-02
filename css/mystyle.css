@@ -2058,11 +2058,20 @@ html[data-theme="dark"] .theme-toggle .moon-icon {
         align-items: flex-start;
         gap: 16px;
         margin-bottom: 8px;
+        position: relative;
+        width: 100%;
+    }
+
+    .hero-nav .theme-toggle {
+        position: absolute;
+        top: 20px;
+        right: 0;
     }
 
     .hero-links {
         gap: 20px;
         flex-wrap: wrap;
+        padding-right: 48px;
     }
 
     .hero-links a {

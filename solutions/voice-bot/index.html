@@ -19,7 +19,7 @@
     <script>
         (function() {
             const t = localStorage.getItem('mbr-theme');
-            if (t === 'dark' || (!t && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+            if (t === 'dark') {
                 document.documentElement.setAttribute('data-theme', 'dark');
             }
         })();
