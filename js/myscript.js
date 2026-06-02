@@ -7,6 +7,29 @@ const MEDIUM_USERNAME = "emdibee";
 
 document.addEventListener('DOMContentLoaded', () => {
 
+    // --- Dark Theme Toggle Control ---
+    const themeToggles = document.querySelectorAll('.theme-toggle');
+    
+    // Function to apply theme (light or dark)
+    const applyTheme = (theme) => {
+        if (theme === 'dark') {
+            document.documentElement.setAttribute('data-theme', 'dark');
+        } else {
+            document.documentElement.removeAttribute('data-theme');
+        }
+    };
+
+    // Attach click listeners to all theme toggles
+    themeToggles.forEach(toggle => {
+        toggle.addEventListener('click', () => {
+            const currentTheme = document.documentElement.getAttribute('data-theme') === 'dark' ? 'dark' : 'light';
+            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+            
+            applyTheme(newTheme);
+            localStorage.setItem('mbr-theme', newTheme);
+        });
+    });
+
     // --- Sticky/Floating Navbar Reveal on Scroll ---
     const navbarWrapper = document.querySelector('.navbar-wrapper');
     const heroSection = document.getElementById('hero');

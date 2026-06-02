@@ -32,6 +32,11 @@
     --btn-primary-hover: #3E3B37;
     --focus-ring: rgba(79, 70, 229, 0.15);
 
+    /* Glassmorphism Variables */
+    --navbar-bg: rgba(250, 249, 245, 0.4);
+    --navbar-border: rgba(255, 255, 255, 0.45);
+    --navbar-shadow: 0 8px 32px 0 rgba(30, 28, 26, 0.04), inset 0 1px 0 0 rgba(255, 255, 255, 0.6);
+
     /* Dimensions & Animation */
     --max-width: 1040px;
     --radius-sm: 8px;
@@ -43,6 +48,46 @@
     --shadow-subtle: 0 4px 20px rgba(30, 28, 26, 0.03);
     --shadow-hover: 0 8px 30px rgba(30, 28, 26, 0.08);
 }
+
+/* Dark Theme Overrides */
+html[data-theme="dark"] {
+    /* Theme Colors (Warm Charcoal Dark Mode) */
+    --bg-primary: #121110;
+    --bg-secondary: #1C1A18;
+    --bg-tertiary: #262421;
+    --text-primary: #FAF9F5;
+    --text-secondary: #B5B1A9;
+    --text-muted: #7E7A73;
+    --border-color: #2F2D2A;
+    --border-hover: #FAF9F5;
+
+    /* Pastel Accents adjusted for dark backgrounds */
+    --pastel-indigo: #1E2135;
+    --pastel-indigo-text: #818CF8;
+    --pastel-purple: #271E35;
+    --pastel-purple-text: #C084FC;
+    --pastel-emerald: #122F24;
+    --pastel-emerald-text: #34D399;
+    --pastel-orange: #2F2318;
+    --pastel-orange-text: #FB923C;
+    --pastel-sky: #132A3B;
+    --pastel-sky-text: #38BDF8;
+
+    /* Buttons & Interactive */
+    --btn-primary-bg: #FAF9F5;
+    --btn-primary-text: #121110;
+    --btn-primary-hover: #E4E2DD;
+    --focus-ring: rgba(251, 146, 60, 0.25);
+
+    /* Glassmorphism Variables for Dark Mode */
+    --navbar-bg: rgba(28, 26, 24, 0.5);
+    --navbar-border: rgba(255, 255, 255, 0.08);
+    --navbar-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.4), inset 0 1px 0 0 rgba(255, 255, 255, 0.05);
+
+    --shadow-subtle: 0 4px 20px rgba(0, 0, 0, 0.3);
+    --shadow-hover: 0 8px 30px rgba(0, 0, 0, 0.5);
+}
+
 
 /* Global Reset */
 *,
@@ -135,18 +180,16 @@ body {
 }
 
 .navbar {
-    background: rgba(250, 249, 245, 0.4);
+    background: var(--navbar-bg);
     backdrop-filter: blur(18px) saturate(180%);
     -webkit-backdrop-filter: blur(20px) saturate(180%);
-    border: 1px solid rgba(255, 255, 255, 0.45);
+    border: 1px solid var(--navbar-border);
     border-radius: var(--radius-pill);
     padding: 8px 24px;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    box-shadow:
-        0 8px 32px 0 rgba(30, 28, 26, 0.04),
-        inset 0 1px 0 0 rgba(255, 255, 255, 0.6);
+    box-shadow: var(--navbar-shadow);
     transition: var(--transition-smooth);
 }
 
@@ -205,6 +248,50 @@ body {
     transform-origin: center;
 }
 
+/* Theme Toggle Styles */
+.theme-toggle {
+    background: none;
+    border: none;
+    color: var(--text-secondary);
+    cursor: pointer;
+    padding: 8px;
+    border-radius: 50%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    transition: background-color var(--transition-fast), color var(--transition-fast), transform var(--transition-fast);
+}
+
+.theme-toggle:hover {
+    background-color: var(--bg-tertiary);
+    color: var(--text-primary);
+    transform: scale(1.1);
+}
+
+.theme-toggle svg {
+    transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.theme-toggle:active svg {
+    transform: rotate(45deg) scale(0.9);
+}
+
+.theme-toggle .sun-icon {
+    display: none;
+}
+
+.theme-toggle .moon-icon {
+    display: block;
+}
+
+html[data-theme="dark"] .theme-toggle .sun-icon {
+    display: block;
+}
+
+html[data-theme="dark"] .theme-toggle .moon-icon {
+    display: none;
+}
+
 /* Hero Section */
 .hero-section {
     min-height: 100vh;
@@ -244,6 +331,7 @@ body {
 .hero-links {
     display: flex;
     gap: 24px;
+    align-items: center;
 }
 
 .hero-links a {
@@ -571,7 +659,7 @@ body {
     left: 0;
     width: 100%;
     height: 40px;
-    background: linear-gradient(to bottom, rgba(250, 249, 245, 0), var(--bg-primary));
+    background: linear-gradient(to bottom, transparent, var(--bg-primary));
     pointer-events: none;
     transition: opacity var(--transition-fast);
 }
@@ -1721,6 +1809,13 @@ body {
     transform: translateX(4px);
 }
 
+@media (min-width: 769px) {
+    .nav-links {
+        margin-left: auto;
+        margin-right: 20px;
+    }
+}
+
 /* Responsive Rules */
 @media (max-width: 900px) {
     .projects-grid {
@@ -1789,6 +1884,17 @@ body {
     .navbar {
         border-radius: 20px;
         padding: 10px 16px;
+    }
+
+    .navbar .theme-toggle {
+        margin-left: auto;
+        margin-right: 8px;
+    }
+
+    .navbar.mobile-active .theme-toggle {
+        position: absolute;
+        right: 56px;
+        top: 10px;
     }
 
     .menu-toggle {
