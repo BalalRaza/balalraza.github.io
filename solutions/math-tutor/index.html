@@ -42,38 +42,52 @@
         <header class="solution-header">
             <span class="solution-label">PRODUCTION CASE STUDY // BUILT AT BHANZU</span>
             <h1 class="solution-title">AI Math Tutor: Guided Doubt Solving</h1>
-            <p class="solution-subtitle">Orchestrating Gemini 3.1 Pro &amp; Flash for real-time visual mistake highlighting and pedagogical scaffolding</p>
+            <p class="solution-subtitle">Orchestrating Gemini 3.1 Pro &amp; Flash for real-time visual mistake
+                highlighting and step-by-step feedback</p>
         </header>
 
         <section class="solution-section">
             <h2 class="solution-section-title">Pedagogical Scaffolding &amp; Bounding Box Sync</h2>
             <p class="solution-text">
-                To solve the tendency of standard Gen-AI wrappers to simply spoil math answers for students, we engineered a spatial AI Math Tutor. By routing cognitive logic selectively between Gemini 3.1 Pro and Flash, the system acts like a human teacher—guiding the student through chat/talk and circling errors on their work canvas rather than handing out final solutions.
+                To solve the tendency of standard Gen-AI wrappers to simply spoil math answers for students, we
+                engineered a spatial AI Math Tutor. By routing cognitive logic selectively between Gemini 3.1 Pro and
+                Flash, the system acts like a human teacher—delivering real-time <strong>step-by-step feedback</strong> through chat/talk and circling errors on their work canvas rather than handing out final solutions. <strong>Gemini 3.1 was selected as the foundation for this system due to its excellent handwriting recognition skills</strong>, allowing the models to parse highly diverse, non-standard student ink strokes and mathematical writing with absolute precision.
             </p>
 
             <div class="architecture-flow">
                 <div class="flow-step">
                     <h3>1. Student Input &amp; Parallel Dispatch</h3>
-                    <p>As the student works on the <strong>Canvas UI</strong> (writing equations or asking questions), their stroke data and chat messages stream directly to the centralized <strong>Tutor Orchestrator</strong>, which dispatches parallel queries to <strong>Gemini 3.1 Flash</strong> and <strong>Gemini 3.1 Pro</strong> at the same time.</p>
+                    <p>As the student works on the <strong>Canvas UI</strong> (writing equations or asking questions),
+                        their stroke data and chat messages stream directly to the centralized <strong>Tutor
+                            Orchestrator</strong>, which dispatches parallel queries to <strong>Gemini 3.1
+                            Flash</strong> and <strong>Gemini 3.1 Pro</strong> at the same time.</p>
                 </div>
                 <div class="flow-step">
                     <h3>2. Immediate Feedback Stream (Gemini 3.1 Flash)</h3>
-                    <p>The **Gemini 3.1 Flash** model returns quickly (in <strong>3-4 seconds</strong>) with a streaming type response, providing near-instant conversational feedback, receipt confirmation, or quick cues so the student never feels stuck or waiting.</p>
+                    <p>The Gemini 3.1 Flash model returns quickly (in <strong>3-4 seconds</strong>) with a streaming
+                        type response, providing near-instant conversational feedback, receipt confirmation, or quick
+                        cues so the student never feels stuck or waiting.</p>
                 </div>
                 <div class="flow-step">
                     <h3>3. Deep Logical Evaluation (Gemini 3.1 Pro)</h3>
-                    <p>In parallel, the high-reasoning **Gemini 3.1 Pro** model processes the logical and structural algebraic progression in the background, taking a little longer (<strong>10-12 seconds</strong>) to run a comprehensive validation check.</p>
+                    <p>In parallel, the high-reasoning Gemini 3.1 Pro model processes the logical and structural
+                        algebraic progression in the background, taking a little longer (<strong>10-12 seconds</strong>)
+                        to run a comprehensive validation check.</p>
                 </div>
                 <div class="flow-step">
-                    <h3>4. Detailed Guidance &amp; Red Circle Highlight</h3>
-                    <p>Soon after, Gemini Pro's logical assessment returns. If a step error is spotted, the orchestrator appends detailed guidance to the UI and triggers the Canvas to draw a <strong>red circle</strong> directly around the incorrect term to guide the student toward self-correction.</p>
+                    <h3>4. Step-by-Step Feedback &amp; Red Circle Highlight</h3>
+                    <p>Soon after, Gemini Pro's logical assessment returns. If a step error is spotted, the orchestrator
+                        delivers targeted <strong>step-by-step feedback</strong> to the UI and triggers the Canvas to draw a <strong>red
+                            circle</strong> directly around the incorrect term to guide the student toward
+                        self-correction.</p>
                 </div>
             </div>
 
             <!-- Flowchart Section -->
             <div class="flowchart-section">
                 <h3 class="flowchart-title">Visual Request &amp; Evaluation Pipeline</h3>
-                <p class="flowchart-desc">Interactive live view of data flows, vision OCR coordinates, and logic checks navigating the tutor system.</p>
+                <p class="flowchart-desc">Interactive live view of data flows, vision OCR coordinates, and logic checks
+                    navigating the tutor system.</p>
                 <div id="math-tutor-flowchart-container" class="flowchart-container">
                     <div class="flowchart-placeholder">
                         <div class="pulse-ring"></div>
@@ -87,21 +101,23 @@
         <section class="solution-section">
             <h2 class="solution-section-title">Key Interaction Features</h2>
             <p class="solution-text">
-                Creating a natural, non-intrusive learning experience required designing specialized canvas rendering and multimodal vision components:
+                Creating a natural, non-intrusive learning experience with real-time <strong>step-by-step feedback</strong> required designing specialized canvas rendering and multimodal vision components:
             </p>
             <div class="features-grid">
                 <div class="feature-card">
                     <div class="feature-icon">📷</div>
                     <h3 class="feature-title">Physical Worksheet OCR Scanner</h3>
                     <p class="feature-desc">
-                        Instead of typing complex mathematical notation, students scan physical worksheets. The system processes the vision stream to align coordinate grids and map spatial bounding boxes, matching hand-written lines to standard LaTeX nodes.
+                        Instead of typing complex mathematical notation, students scan physical worksheets. Leveraged by Gemini 3.1's excellent handwriting recognition skills, the system processes the raw vision stream to align coordinate grids and accurately map hand-written formulas directly to structured LaTeX nodes on the digital canvas.
                     </p>
                 </div>
                 <div class="feature-card">
                     <div class="feature-icon">🔴</div>
                     <h3 class="feature-title">Interactive Error Circling</h3>
                     <p class="feature-desc">
-                        A custom visual renderer maps bounding coordinates returned by the Gemini vision evaluation model directly to screen pixels. It overlays a hand-drawn-style red circle animation around the incorrect operator or number in real-time.
+                        A custom visual renderer maps bounding coordinates returned by the Gemini vision evaluation
+                        model directly to screen pixels. It overlays a hand-drawn-style red circle animation around the
+                        incorrect operator or number in real-time.
                     </p>
                 </div>
             </div>
@@ -110,7 +126,9 @@
         <section class="solution-section">
             <h2 class="solution-section-title">Rigorous Unit Economics</h2>
             <p class="solution-text">
-                To scale 1:1 tutoring globally, the orchestrator routes simple transcription and UI tasks to the rapid Gemini 3.1 Flash model, reserving the more expensive Gemini 3.1 Pro logic evaluator solely for logic checks.
+                To scale 1:1 tutoring globally, the orchestrator routes simple transcription and UI tasks to the rapid
+                Gemini 3.1 Flash model, reserving the more expensive Gemini 3.1 Pro logic evaluator solely for logic
+                checks.
             </p>
 
             <div class="table-wrapper">
@@ -125,22 +143,26 @@
                     <tbody>
                         <tr>
                             <td><strong>Vision OCR / Digitization</strong></td>
-                            <td>₹0.04 per page scan<br><span class="table-subtext">Processes image coordinates</span></td>
+                            <td>₹0.04 per page scan<br><span class="table-subtext">Processes image coordinates</span>
+                            </td>
                             <td>N/A (Routed to Flash)</td>
                         </tr>
                         <tr>
                             <td><strong>Chat &amp; Dialogue Scaffolding</strong></td>
-                            <td>₹0.02 per query<br><span class="table-subtext">Handles conversational phrasing</span></td>
+                            <td>₹0.02 per query<br><span class="table-subtext">Handles conversational phrasing</span>
+                            </td>
                             <td>N/A (Routed to Flash)</td>
                         </tr>
                         <tr>
                             <td><strong>Logical Step Evaluation</strong></td>
                             <td>N/A (Requires high-reasoning)</td>
-                            <td>₹0.38 per logic check<br><span class="table-subtext">Verifies mathematical logic integrity</span></td>
+                            <td>₹0.38 per logic check<br><span class="table-subtext">Verifies mathematical logic
+                                    integrity</span></td>
                         </tr>
                         <tr class="table-highlight">
                             <td><strong>Blended Cost per Step</strong></td>
-                            <td colspan="2"><strong>~₹0.12 average cost per problem-solving step</strong> (vs ₹300/hr human coach)</td>
+                            <td colspan="2"><strong>~₹0.12 average cost per problem-solving step</strong> (vs ₹300/hr
+                                human coach)</td>
                         </tr>
                     </tbody>
                 </table>
@@ -153,12 +175,14 @@
                 <div class="impact-card">
                     <span class="impact-stat">92%</span>
                     <span class="impact-label">Student Self-Correction Rate</span>
-                    <p class="impact-desc">Students successfully resolve flagged errors on their own without needing the tutor to reveal the correct answer.</p>
+                    <p class="impact-desc">Students successfully resolve flagged errors on their own without needing the
+                        tutor to reveal the correct answer.</p>
                 </div>
                 <div class="impact-card">
                     <span class="impact-stat">65%</span>
                     <span class="impact-label">Support Ticket Scaling Cost Reduction</span>
-                    <p class="impact-desc">Direct savings in student dashboard support operations by shifting 1:1 live doubt-clearing calls to automated scaffolding.</p>
+                    <p class="impact-desc">Direct savings in student dashboard support operations by shifting 1:1 live
+                        doubt-clearing calls to automated scaffolding.</p>
                 </div>
             </div>
         </section>
