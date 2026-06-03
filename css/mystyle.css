@@ -1557,7 +1557,7 @@ html[data-theme="dark"] .theme-toggle .moon-icon {
 
 /* Footer */
 .footer {
-    background-color: white;
+    background-color: var(--bg-secondary);
     padding: 1rem;
 }
 
