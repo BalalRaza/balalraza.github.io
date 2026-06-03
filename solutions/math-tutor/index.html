@@ -43,6 +43,11 @@
                 <a href="../../#experience">Experience</a>
                 <a href="../../#doctrine">Doctrine</a>
                 <a href="../../#contact">Contact</a>
+                <label class="jargon-toggle-label" title="Simplify technical terms">
+                    <input type="checkbox" class="jargon-toggle-input">
+                    <span class="jargon-toggle-switch"></span>
+                    <span class="jargon-toggle-text">Explain like a Founder</span>
+                </label>
             </div>
             <button class="theme-toggle" aria-label="Toggle theme">
                 <svg class="sun-icon" viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
@@ -82,8 +87,8 @@
             <h2 class="solution-section-title">Pedagogical Scaffolding &amp; Bounding Box Sync</h2>
             <p class="solution-text">
                 To solve the tendency of standard Gen-AI wrappers to simply spoil math answers for students, we
-                engineered a spatial AI Math Tutor. By routing cognitive logic selectively between Gemini 3.1 Pro and
-                Flash, the system acts like a human teacher—delivering real-time <strong>step-by-step feedback</strong> through chat/talk and circling errors on their work canvas rather than handing out final solutions. <strong>Gemini 3.1 was selected as the foundation for this system due to its excellent handwriting recognition skills</strong>, allowing the models to parse highly diverse, non-standard student ink strokes and mathematical writing with absolute precision.
+                engineered a spatial AI Math Tutor. By routing cognitive logic selectively between <span class="jargon-term">Gemini 3.1 Pro</span> and
+                <span class="jargon-term">Flash</span>, the system acts like a human teacher—delivering real-time <strong>step-by-step feedback</strong> through chat/talk and circling errors on their work canvas rather than handing out final solutions. <strong>Gemini 3.1 was selected as the foundation for this system due to its excellent handwriting recognition skills</strong>, allowing the models to parse highly diverse, non-standard student ink strokes and mathematical writing with absolute precision.
             </p>
 
             <div class="architecture-flow">
@@ -225,6 +230,13 @@
             <p>Md Balal Raza &copy; 2026. All rights reserved.</p>
         </div>
     </footer>
+
+    <!-- Jargon Tooltip Container -->
+    <div id="jargon-tooltip" class="tooltip-hidden">
+        <div class="tooltip-arrow"></div>
+        <div class="tooltip-title"></div>
+        <div class="tooltip-translation"></div>
+    </div>
 
     <!-- Flowchart Script -->
     <script src="../../js/math-tutor-flowchart.js" defer></script>

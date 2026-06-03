@@ -43,6 +43,11 @@
                 <a href="../../#experience">Experience</a>
                 <a href="../../#doctrine">Doctrine</a>
                 <a href="../../#contact">Contact</a>
+                <label class="jargon-toggle-label" title="Simplify technical terms">
+                    <input type="checkbox" class="jargon-toggle-input">
+                    <span class="jargon-toggle-switch"></span>
+                    <span class="jargon-toggle-text">Explain like a Founder</span>
+                </label>
             </div>
             <button class="theme-toggle" aria-label="Toggle theme">
                 <svg class="sun-icon" viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
@@ -90,7 +95,7 @@
                 </div>
                 <div class="flow-step">
                     <h3>2. Low-Latency STT Loop</h3>
-                    <p>Inbound audio streams straight to <strong>Deepgram Flux</strong> for Speech-to-Text over WebSockets. Text tokens stream immediately to our custom LLM orchestration layer.</p>
+                    <p>Inbound audio streams straight to <strong><span class="jargon-term">Deepgram Flux</span></strong> for Speech-to-Text over <span class="jargon-term">WebSocket</span>s. Text tokens stream immediately to our custom LLM orchestration layer.</p>
                 </div>
                 <div class="flow-step">
                     <h3>3. Custom Barge-In Engine</h3>
@@ -212,6 +217,13 @@
             <p>Md Balal Raza &copy; 2026. All rights reserved.</p>
         </div>
     </footer>
+
+    <!-- Jargon Tooltip Container -->
+    <div id="jargon-tooltip" class="tooltip-hidden">
+        <div class="tooltip-arrow"></div>
+        <div class="tooltip-title"></div>
+        <div class="tooltip-translation"></div>
+    </div>
 
     <!-- Flowchart Script -->
     <script src="../../js/flowchart.js" defer></script>
