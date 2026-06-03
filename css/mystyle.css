@@ -166,7 +166,7 @@ body {
     left: 50%;
     transform: translate(-50%, -30px);
     width: calc(100% - 40px);
-    max-width: 700px;
+    max-width: var(--max-width);
     z-index: 100;
     opacity: 0;
     pointer-events: none;
@@ -2373,7 +2373,7 @@ html[data-theme="dark"] .theme-toggle .moon-icon {
 
 .search-section-wrapper {
     width: 100%;
-    max-width: 600px;
+    max-width: 100%;
     margin-top: 10px;
     margin-bottom: 36px;
     position: relative;
@@ -2713,4 +2713,162 @@ html[data-theme="dark"] .search-result-card:hover {
         width: calc(100vw - 48px);
         right: 0px;
     }
+}
+
+/* --- Jargon Decoder Toggle Switch --- */
+.jargon-toggle-label {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+    font-size: 0.8125rem;
+    font-weight: 600;
+    color: var(--text-secondary);
+    user-select: none;
+    padding: 6px 12px;
+    border-radius: var(--radius-pill);
+    transition: var(--transition-fast);
+}
+
+.jargon-toggle-label:hover {
+    color: var(--text-primary);
+    background-color: var(--bg-tertiary);
+}
+
+.jargon-toggle-input {
+    position: absolute;
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.jargon-toggle-switch {
+    position: relative;
+    display: inline-block;
+    width: 32px;
+    height: 18px;
+    background-color: var(--border-color);
+    border-radius: var(--radius-pill);
+    transition: var(--transition-smooth);
+}
+
+.jargon-toggle-switch::before {
+    content: "";
+    position: absolute;
+    left: 2px;
+    top: 2px;
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    background-color: var(--bg-secondary);
+    transition: var(--transition-smooth);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.15);
+}
+
+.jargon-toggle-input:checked + .jargon-toggle-switch {
+    background-color: var(--pastel-orange-text);
+}
+
+.jargon-toggle-input:checked + .jargon-toggle-switch::before {
+    transform: translateX(14px);
+}
+
+.jargon-toggle-input:focus-visible + .jargon-toggle-switch {
+    box-shadow: 0 0 0 2px var(--focus-ring);
+}
+
+/* Jargon Term Highlighting */
+.jargon-term {
+    position: relative;
+    transition: border-bottom var(--transition-fast), background-color var(--transition-fast);
+    border-bottom: 1.5px dashed transparent;
+    cursor: default;
+}
+
+.jargon-mode-active .jargon-term {
+    border-bottom: 1.5px dashed var(--pastel-orange-text);
+    background-color: rgba(234, 88, 12, 0.08); /* 8% opacity of pastel orange */
+    cursor: help;
+    padding: 0 2px;
+    border-radius: 4px;
+}
+
+.jargon-mode-active .jargon-term:hover {
+    background-color: rgba(234, 88, 12, 0.15); /* 15% opacity on hover */
+}
+
+/* Jargon Tooltip Container */
+#jargon-tooltip {
+    position: absolute;
+    z-index: 1000;
+    max-width: 320px;
+    width: calc(100vw - 32px);
+    background: var(--bg-secondary);
+    border: 1.5px solid var(--pastel-orange-text);
+    border-radius: var(--radius-md);
+    padding: 16px;
+    box-shadow: 0 12px 36px rgba(0, 0, 0, 0.16), 0 0 0 1px rgba(234, 88, 12, 0.08);
+    font-size: 0.875rem;
+    line-height: 1.5;
+    color: var(--text-primary);
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(8px) scale(0.95);
+    transition: opacity var(--transition-fast), transform var(--transition-fast), visibility var(--transition-fast);
+    pointer-events: none;
+    backdrop-filter: blur(20px) saturate(180%);
+    -webkit-backdrop-filter: blur(20px) saturate(180%);
+}
+
+html[data-theme="dark"] #jargon-tooltip {
+    box-shadow: 0 12px 36px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(251, 146, 60, 0.15);
+}
+
+#jargon-tooltip.active {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0) scale(1);
+    pointer-events: auto;
+}
+
+.tooltip-loading {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: var(--text-muted);
+}
+
+/* Spinner styling */
+.tooltip-loading .spinner {
+    animation: spin 1s linear infinite;
+    flex-shrink: 0;
+}
+
+.tooltip-title {
+    font-family: var(--font-title);
+    font-weight: 700;
+    font-size: 0.9rem;
+    color: var(--pastel-orange-text);
+    margin-bottom: 6px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.tooltip-translation {
+    color: var(--text-secondary);
+}
+
+.tooltip-arrow {
+    position: absolute;
+    width: 12px;
+    height: 12px;
+    background: var(--bg-secondary);
+    border-left: 1.5px solid var(--pastel-orange-text);
+    border-top: 1.5px solid var(--pastel-orange-text);
+    transform: rotate(45deg);
+    z-index: -1;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
 }
