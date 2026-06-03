@@ -404,5 +404,110 @@ document.addEventListener('DOMContentLoaded', () => {
 
     fetchMediumPosts();
 
+    // --- Edge Telemetry Ticker Logic ---
+    const initTelemetry = async () => {
+        const dashboard = document.getElementById('telemetry-dashboard');
+        const statusDot = document.getElementById('telemetry-status');
+        const tokenCountEl = document.getElementById('token-count');
+        const computeCostEl = document.getElementById('compute-cost');
+        const toggleBtn = document.getElementById('telemetry-toggle-btn');
+        
+        if (!dashboard || !statusDot || !tokenCountEl || !computeCostEl || !toggleBtn) return;
+        
+        let totalTokens = 0;
+        let tokenizer = null;
+        
+        // Handle panel expand/collapse and user interaction flag
+        toggleBtn.addEventListener('click', () => {
+            dashboard.classList.add('user-interacted');
+            dashboard.classList.toggle('collapsed');
+        });
+        
+        try {
+            // Dynamically import js-tiktoken
+            const { getEncoding } = await import("https://esm.sh/js-tiktoken");
+            tokenizer = getEncoding("cl100k_base");
+            
+            // Update status UI to ready
+            statusDot.classList.remove('pulse');
+            statusDot.classList.add('ready');
+            statusDot.setAttribute('title', 'Telemetry Ready & Active');
+            
+            // Auto-reveal the dashboard upon initialization, then collapse after 4 seconds
+            dashboard.classList.remove('collapsed');
+            setTimeout(() => {
+                if (!dashboard.matches(':hover') && !dashboard.classList.contains('user-interacted')) {
+                    dashboard.classList.add('collapsed');
+                }
+            }, 4000);
+            
+            // Setup IntersectionObserver
+            const observerOptions = {
+                root: null,
+                rootMargin: '0px',
+                threshold: 0.1
+            };
+            
+            const handleIntersection = (entries, observer) => {
+                let updated = false;
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        const element = entry.target;
+                        if (element.getAttribute('data-tokenized') === 'true') return;
+                        
+                        element.setAttribute('data-tokenized', 'true');
+                        
+                        // Calculate tokens
+                        const text = element.innerText || "";
+                        if (text.trim().length > 0 && tokenizer) {
+                            const tokens = tokenizer.encode(text).length;
+                            totalTokens += tokens;
+                            updated = true;
+                        }
+                    }
+                });
+                
+                if (updated) {
+                    updateTelemetryUI();
+                }
+            };
+            
+            const updateTelemetryUI = () => {
+                const simulatedCost = (totalTokens / 1000000) * 0.15;
+                
+                // Trigger metrics flash micro-animation
+                tokenCountEl.classList.add('flash');
+                computeCostEl.classList.add('flash');
+                
+                tokenCountEl.textContent = totalTokens.toLocaleString();
+                computeCostEl.textContent = `$${simulatedCost.toFixed(5)}`;
+                
+                setTimeout(() => {
+                    tokenCountEl.classList.remove('flash');
+                    computeCostEl.classList.remove('flash');
+                }, 300);
+            };
+            
+            const observer = new IntersectionObserver(handleIntersection, observerOptions);
+            
+            // Target distinct, non-overlapping primary containers
+            const targets = [
+                document.getElementById('hero'),
+                ...document.querySelectorAll('.case-study-card'),
+                ...document.querySelectorAll('.timeline-item'),
+                document.getElementById('doctrine'),
+                document.getElementById('contact')
+            ].filter(el => el !== null);
+            
+            targets.forEach(target => observer.observe(target));
+            
+        } catch (error) {
+            console.error("Failed to load tokenizer from CDN:", error);
+            statusDot.style.backgroundColor = "var(--pastel-orange-text)";
+            statusDot.setAttribute('title', 'Telemetry Offline (CDN error)');
+        }
+    };
+    
+    initTelemetry();
 
 });

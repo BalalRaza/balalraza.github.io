@@ -483,6 +483,31 @@
         </div>
     </div>
 
+    <!-- Floating Edge Telemetry Ticker -->
+    <div id="telemetry-dashboard" class="telemetry-wrapper collapsed" aria-label="Edge Telemetry Ticker">
+        <div class="telemetry-container">
+            <!-- Status dot -->
+            <span class="telemetry-status-dot pulse" id="telemetry-status" title="Initializing Telemetry..."></span>
+            
+            <!-- Metrics -->
+            <div class="telemetry-metrics">
+                <span class="telemetry-label">Tokens Viewed: <span class="telemetry-value" id="token-count">0</span></span>
+                <span class="telemetry-divider">|</span>
+                <span class="telemetry-label">Simulated Cost: <span class="telemetry-value" id="compute-cost">$0.00000</span></span>
+            </div>
+            
+            <!-- Toggle button -->
+            <button class="telemetry-toggle-btn" id="telemetry-toggle-btn" aria-label="Toggle Telemetry Panel">
+                <svg class="toggle-icon-collapse" viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="6 9 12 15 18 9"></polyline>
+                </svg>
+                <svg class="toggle-icon-expand" viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="18 15 12 9 6 15"></polyline>
+                </svg>
+            </button>
+        </div>
+    </div>
+
 </body>
 
 </html>

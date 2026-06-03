@@ -2126,3 +2126,194 @@ html[data-theme="dark"] .theme-toggle .moon-icon {
         grid-template-columns: 1fr;
     }
 }
+
+/* ==========================================
+   Edge Telemetry Ticker Styles
+   ========================================== */
+.telemetry-wrapper {
+    position: fixed;
+    bottom: 24px;
+    left: 50%;
+    transform: translateX(-50%) translateY(0);
+    width: calc(100% - 40px);
+    max-width: 600px;
+    z-index: 90;
+    transition: transform var(--transition-smooth), width var(--transition-smooth), max-width var(--transition-smooth), border-radius var(--transition-smooth), bottom var(--transition-smooth), left var(--transition-smooth);
+    pointer-events: auto;
+}
+
+.telemetry-container {
+    background: var(--navbar-bg);
+    backdrop-filter: blur(18px) saturate(180%);
+    -webkit-backdrop-filter: blur(18px) saturate(180%);
+    border: 1px solid var(--navbar-border);
+    border-radius: var(--radius-pill);
+    padding: 10px 24px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: var(--navbar-shadow);
+    transition: all var(--transition-smooth);
+    position: relative;
+    overflow: hidden;
+}
+
+.telemetry-container:hover {
+    box-shadow: var(--shadow-hover);
+    transform: translateY(-2px);
+    border-color: var(--text-muted);
+}
+
+.telemetry-status-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background-color: var(--pastel-orange-text);
+    display: inline-block;
+    flex-shrink: 0;
+    transition: background-color var(--transition-smooth);
+}
+
+.telemetry-status-dot.pulse {
+    animation: telemetry-pulse 2s infinite ease-in-out;
+}
+
+.telemetry-status-dot.ready {
+    background-color: var(--pastel-emerald-text);
+}
+
+.telemetry-metrics {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    font-family: var(--font-sans);
+    font-size: 0.875rem;
+    color: var(--text-secondary);
+    transition: opacity var(--transition-smooth);
+    width: 100%;
+    margin: 0 16px;
+    justify-content: center;
+}
+
+.telemetry-label {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-weight: 500;
+}
+
+.telemetry-value {
+    font-family: SFMono-Regular, Consolas, Monaco, monospace;
+    font-weight: 700;
+    color: var(--pastel-orange-text);
+    transition: color var(--transition-fast), transform var(--transition-fast);
+    display: inline-block;
+}
+
+.telemetry-value.flash {
+    color: var(--pastel-emerald-text);
+    transform: scale(1.1);
+}
+
+.telemetry-divider {
+    color: var(--border-color);
+    font-weight: 300;
+}
+
+.telemetry-toggle-btn {
+    background: none;
+    border: none;
+    color: var(--text-secondary);
+    cursor: pointer;
+    padding: 6px;
+    border-radius: 50%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    transition: background-color var(--transition-fast), color var(--transition-fast), transform var(--transition-fast);
+    flex-shrink: 0;
+}
+
+.telemetry-toggle-btn:hover {
+    background-color: var(--bg-tertiary);
+    color: var(--text-primary);
+}
+
+/* Toggle Icon Visibility based on state */
+.telemetry-wrapper .toggle-icon-collapse {
+    display: block;
+}
+.telemetry-wrapper .toggle-icon-expand {
+    display: none;
+}
+
+/* Collapsed State Styles */
+.telemetry-wrapper.collapsed {
+    width: 48px;
+    max-width: 48px;
+    left: calc(100% - 44px);
+    transform: translateX(-100%);
+}
+
+@media (max-width: 640px) {
+    .telemetry-wrapper.collapsed {
+        left: calc(100% - 28px);
+    }
+}
+
+.telemetry-wrapper.collapsed .telemetry-container {
+    padding: 12px;
+    justify-content: center;
+    border-radius: 50%;
+}
+
+.telemetry-wrapper.collapsed .telemetry-metrics {
+    display: none;
+}
+
+.telemetry-wrapper.collapsed .toggle-icon-collapse {
+    display: none;
+}
+.telemetry-wrapper.collapsed .toggle-icon-expand {
+    display: block;
+}
+
+.telemetry-wrapper.collapsed .telemetry-status-dot {
+    position: absolute;
+    top: 4px;
+    right: 4px;
+    width: 8px;
+    height: 8px;
+}
+
+/* Animations */
+@keyframes telemetry-pulse {
+    0% {
+        box-shadow: 0 0 0 0 rgba(234, 88, 12, 0.4);
+    }
+    70% {
+        box-shadow: 0 0 0 8px rgba(234, 88, 12, 0);
+    }
+    100% {
+        box-shadow: 0 0 0 0 rgba(234, 88, 12, 0);
+    }
+}
+
+/* Safe Area Inset Support for Mobile Viewports */
+@supports (padding-bottom: env(safe-area-inset-bottom)) {
+    .telemetry-wrapper {
+        bottom: calc(24px + env(safe-area-inset-bottom));
+    }
+}
+
+/* Adjustments when mobile keyboard or small screen wraps metrics */
+@media (max-width: 480px) {
+    .telemetry-metrics {
+        flex-direction: column;
+        gap: 4px;
+        margin: 0 8px;
+    }
+    .telemetry-divider {
+        display: none;
+    }
+}
