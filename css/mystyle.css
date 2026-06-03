@@ -1482,6 +1482,11 @@ html[data-theme="dark"] .theme-toggle .moon-icon {
     margin-bottom: 8px;
 }
 
+.required-asterisk {
+    color: #EF4444;
+    margin-left: 2px;
+}
+
 .form-group input,
 .form-group textarea {
     width: 100%;
@@ -1517,6 +1522,50 @@ html[data-theme="dark"] .theme-toggle .moon-icon {
 
 .form-group.invalid .error-msg {
     display: block;
+}
+
+#intent-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    padding: 6px 12px;
+    border-radius: var(--radius-pill);
+    transition: opacity var(--transition-smooth), transform var(--transition-smooth), margin var(--transition-smooth), padding var(--transition-smooth), max-height var(--transition-smooth);
+    margin-top: 10px;
+    opacity: 1;
+    transform: translateY(0);
+    max-height: 40px;
+    overflow: hidden;
+}
+
+#intent-badge.badge-hidden {
+    opacity: 0;
+    transform: translateY(-8px);
+    pointer-events: none;
+    margin-top: 0;
+    max-height: 0;
+    padding-top: 0;
+    padding-bottom: 0;
+}
+
+#intent-badge.badge-loading {
+    background-color: var(--pastel-orange);
+    color: var(--pastel-orange-text);
+    border: 1px solid rgba(234, 88, 12, 0.15);
+}
+
+#intent-badge.badge-high-value {
+    background-color: var(--pastel-emerald);
+    color: var(--pastel-emerald-text);
+    border: 1px solid rgba(5, 150, 105, 0.15);
+}
+
+#intent-badge.badge-generic {
+    background-color: var(--bg-tertiary);
+    color: var(--text-muted);
+    border: 1px solid var(--border-color);
 }
 
 .submit-btn {
