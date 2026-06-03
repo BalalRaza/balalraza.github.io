@@ -279,8 +279,15 @@ document.addEventListener('DOMContentLoaded', () => {
                     throw new Error('No items found or status not ok');
                 }
 
-                // Slice the most recent 3 posts
-                const posts = data.items.slice(0, 3);
+                // Filter out the older article from 2017 (and 2018 first-year article)
+                const posts = data.items
+                    .filter(post => {
+                        if (!post.pubDate) return true;
+                        const dateObj = new Date(post.pubDate.replace(/-/g, '/'));
+                        const year = dateObj.getFullYear();
+                        return isNaN(year) || (year !== 2017 && year !== 2018);
+                    })
+                    .slice(0, 3);
                 writingGrid.innerHTML = ''; // Clear skeleton or default text
 
                 const tagClasses = ['tag-indigo', 'tag-sky', 'tag-purple', 'tag-emerald', 'tag-orange'];
