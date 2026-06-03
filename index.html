@@ -17,7 +17,7 @@
 
     <!-- Theme Initializer -->
     <script>
-        (function() {
+        (function () {
             const t = localStorage.getItem('mbr-theme');
             if (t === 'dark') {
                 document.documentElement.setAttribute('data-theme', 'dark');
@@ -46,7 +46,8 @@
                 <a href="#contact">Contact</a>
             </div>
             <button class="theme-toggle" aria-label="Toggle theme">
-                <svg class="sun-icon" viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                <svg class="sun-icon" viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2"
+                    fill="none" stroke-linecap="round" stroke-linejoin="round">
                     <circle cx="12" cy="12" r="5"></circle>
                     <line x1="12" y1="1" x2="12" y2="3"></line>
                     <line x1="12" y1="21" x2="12" y2="23"></line>
@@ -57,7 +58,8 @@
                     <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
                     <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
                 </svg>
-                <svg class="moon-icon" viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                <svg class="moon-icon" viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2"
+                    fill="none" stroke-linecap="round" stroke-linejoin="round">
                     <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
                 </svg>
             </button>
@@ -84,7 +86,8 @@
                         <a href="#doctrine">Doctrine</a>
                         <a href="#contact">Contact</a>
                         <button class="theme-toggle" aria-label="Toggle theme">
-                            <svg class="sun-icon" viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                            <svg class="sun-icon" viewBox="0 0 24 24" width="20" height="20" stroke="currentColor"
+                                stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
                                 <circle cx="12" cy="12" r="5"></circle>
                                 <line x1="12" y1="1" x2="12" y2="3"></line>
                                 <line x1="12" y1="21" x2="12" y2="23"></line>
@@ -95,7 +98,8 @@
                                 <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
                                 <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
                             </svg>
-                            <svg class="moon-icon" viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                            <svg class="moon-icon" viewBox="0 0 24 24" width="20" height="20" stroke="currentColor"
+                                stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
                                 <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
                             </svg>
                         </button>
@@ -106,8 +110,38 @@
                     <h4 class="hero-tagline">engineering • product • AI</h4>
                     <h2 class="hero-title">I build highly predictable, cost-optimized AI production systems.</h2>
                     <p class="hero-bio">
-                        Product-Minded Software Engineer specialized in AI integrations and high-performance backend pipelines. I design resilient, multi-model architectures that solve real-world operational bottlenecks and scale with strict unit economics.
+                        Product-Minded Software Engineer specialized in AI integrations and high-performance backend
+                        pipelines. I design resilient, multi-model architectures that solve real-world operational
+                        bottlenecks and scale with strict unit economics.
                     </p>
+
+                    <!-- Semantic Search (Client-Side RAG) -->
+                    <div class="search-section-wrapper">
+                        <div class="search-bar-container">
+                            <svg class="search-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20"
+                                viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                stroke-linecap="round" stroke-linejoin="round">
+                                <circle cx="11" cy="11" r="8"></circle>
+                                <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                            </svg>
+                            <input type="text" id="semantic-search"
+                                placeholder="Search my resume by intent (e.g. 'voice bot', 'video streaming')..."
+                                autocomplete="off" aria-label="Semantic Search">
+                            <div class="search-status-badge" id="search-status-badge">
+                                <span class="status-dot"></span>
+                                <span class="status-text">Semantic Search</span>
+                            </div>
+                        </div>
+                        <div class="search-loader-container" id="search-loader-container" style="display: none;">
+                            <svg class="spinner" viewBox="0 0 24 24" width="18" height="18" stroke="currentColor"
+                                stroke-width="3" fill="none">
+                                <circle cx="12" cy="12" r="10" stroke-opacity="0.25"></circle>
+                                <path d="M12 2a10 10 0 0 1 10 10" stroke-linecap="round"></path>
+                            </svg>
+                            <span class="loader-text">Loading edge AI model (22MB)...</span>
+                        </div>
+                        <div id="search-results" class="search-results-container" style="display: none;"></div>
+                    </div>
 
                     <div class="hero-socials">
                         <a href="tel:+918910966921" class="social-link" title="Phone">
@@ -162,7 +196,7 @@
         <section id="case-study" class="section section-bg">
             <div class="container">
                 <h2 class="section-title">Production Case Studies</h2>
-                <div class="case-study-card">
+                <div class="case-study-card" id="case-study-math-tutor">
                     <div class="case-study-info">
                         <div>
                             <div class="case-study-header">
@@ -171,7 +205,11 @@
                             </div>
                             <h3 class="case-study-title">AI Math Tutor: Guided Doubt Solving</h3>
                             <p class="case-study-context">
-                                To help students master concepts themselves, we engineered a spatial AI Math Tutor utilizing Gemini 3.1 Pro and Flash. The interface offers interactive question bank selection or physical worksheet image upload (OCR). While students work, the AI provides real-time guidance and highlights mistakes visually by drawing red circles directly around incorrect parts of equations, mimicking a human tutor.
+                                To help students master concepts themselves, we engineered a spatial AI Math Tutor
+                                utilizing Gemini 3.1 Pro and Flash. The interface offers interactive question bank
+                                selection or physical worksheet image upload (OCR). While students work, the AI provides
+                                real-time guidance and highlights mistakes visually by drawing red circles directly
+                                around incorrect parts of equations, mimicking a human tutor.
                             </p>
                         </div>
                         <div>
@@ -183,7 +221,8 @@
                             </div>
                             <a href="solutions/math-tutor/" class="case-study-link">
                                 Read Technical Breakdown
-                                <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2.5"
+                                    fill="none" stroke-linecap="round" stroke-linejoin="round">
                                     <line x1="5" y1="12" x2="19" y2="12"></line>
                                     <polyline points="12 5 19 12 12 19"></polyline>
                                 </svg>
@@ -206,7 +245,7 @@
                     </div>
                 </div>
 
-                <div class="case-study-card">
+                <div class="case-study-card" id="case-study-voice-bot">
                     <div class="case-study-info">
                         <div>
                             <div class="case-study-header">
@@ -215,7 +254,9 @@
                             </div>
                             <h3 class="case-study-title">Enterprise AI Voice Automation Pipeline</h3>
                             <p class="case-study-context">
-                                High-volume Ed-Tech demo reminders and rescheduling created an expensive human operational bottleneck at Bhanzu. This event-driven, bidirectional WebSocket system automates the workflow deterministically using live scheduling infrastructure.
+                                High-volume Ed-Tech demo reminders and rescheduling created an expensive human
+                                operational bottleneck at Bhanzu. This event-driven, bidirectional WebSocket system
+                                automates the workflow deterministically using live scheduling infrastructure.
                             </p>
                         </div>
                         <div>
@@ -227,7 +268,8 @@
                             </div>
                             <a href="solutions/voice-bot/" class="case-study-link">
                                 Read Technical Breakdown
-                                <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2.5"
+                                    fill="none" stroke-linecap="round" stroke-linejoin="round">
                                     <line x1="5" y1="12" x2="19" y2="12"></line>
                                     <polyline points="12 5 19 12 12 19"></polyline>
                                 </svg>
@@ -257,7 +299,7 @@
             <h2 class="section-title">Work Experience</h2>
             <div class="timeline">
 
-                <div class="timeline-item">
+                <div class="timeline-item" id="experience-bhanzu">
                     <div class="timeline-dot"></div>
                     <div class="timeline-header">
                         <span class="timeline-date">May 2023 - Present</span>
@@ -269,8 +311,17 @@
                     <div class="timeline-body collapsible">
                         <div class="collapsible-content">
                             <ul>
-                                <li><strong>AI Smart Tutor (Feb 2026 - Apr 2026)</strong>: Developed a spatial UI-driven AI tutor that facilitates step-by-step mathematical problem solving. Built a dynamic scaffolding engine that provides personalized hints, has real-time error correction, and suggests missing steps to students. <a href="solutions/math-tutor/"><strong>[Read the Full Engineering Case Study &uarr;]</strong></a></li>
-                                <li><strong>AI Voice Automation Pipeline (Sep 2025 - Oct 2025)</strong>: Architected and deployed the core event-driven AI Voice Agent system for mid-funnel operations, driving an immediate 30% operational headcount reduction. <a href="solutions/voice-bot/"><strong>[Read the Full Engineering Case Study &uarr;]</strong></a></li>
+                                <li><strong>AI Smart Tutor (Feb 2026 - Apr 2026)</strong>: Developed a spatial UI-driven
+                                    AI tutor that facilitates step-by-step mathematical problem solving. Built a dynamic
+                                    scaffolding engine that provides personalized hints, has real-time error correction,
+                                    and suggests missing steps to students. <a
+                                        href="solutions/math-tutor/"><strong>[Read the Full Engineering Case Study
+                                            &uarr;]</strong></a></li>
+                                <li><strong>AI Voice Automation Pipeline (Sep 2025 - Oct 2025)</strong>: Architected and
+                                    deployed the core event-driven AI Voice Agent system for mid-funnel operations,
+                                    driving an immediate 30% operational headcount reduction. <a
+                                        href="solutions/voice-bot/"><strong>[Read the Full Engineering Case Study
+                                            &uarr;]</strong></a></li>
                                 <li>Led complete rewrite of student dashboard using bulletproof-react architecture,
                                     building
                                     extensible infrastructure with comprehensive test coverage and development
@@ -282,7 +333,10 @@
                                 <li><strong>Hackathon Winner</strong>: Designed and deployed an AI-based Stories and
                                     Highlights feature that automates video extraction from class recordings,
                                     streamlining
-                                    student recaps, enhancing dashboard engagement. <a href="https://medium.com/@emdibee/innovating-together-our-hackathon-journey-of-discovery-and-triumph-32b0aaa60fa6" target="_blank" rel="noopener noreferrer"><strong>[Read the Medium Post &uarr;]</strong></a></li>
+                                    student recaps, enhancing dashboard engagement. <a
+                                        href="https://medium.com/@emdibee/innovating-together-our-hackathon-journey-of-discovery-and-triumph-32b0aaa60fa6"
+                                        target="_blank" rel="noopener noreferrer"><strong>[Read the Medium Post
+                                            &uarr;]</strong></a></li>
                                 <li>Optimized company website from 56 to ~95 Lighthouse score on desktop and from 45 to
                                     ~85
                                     on mobile.</li>
@@ -295,7 +349,7 @@
                     </div>
                 </div>
 
-                <div class="timeline-item">
+                <div class="timeline-item" id="experience-amex">
                     <div class="timeline-dot"></div>
                     <div class="timeline-header">
                         <span class="timeline-date">Dec 2020 - May 2023</span>
@@ -324,7 +378,7 @@
                     </div>
                 </div>
 
-                <div class="timeline-item">
+                <div class="timeline-item" id="experience-bdi">
                     <div class="timeline-dot"></div>
                     <div class="timeline-header">
                         <span class="timeline-date">Feb 2020 - Dec 2020</span>
@@ -352,7 +406,7 @@
                     </div>
                 </div>
 
-                <div class="timeline-item">
+                <div class="timeline-item" id="experience-finoramic">
                     <div class="timeline-dot"></div>
                     <div class="timeline-header">
                         <span class="timeline-date">Sep 2017 - Jan 2020</span>
@@ -402,7 +456,13 @@
                 <div class="doctrine-block">
                     <h3 class="doctrine-lead">Systems Over Snippets.</h3>
                     <p class="doctrine-text">
-                        The current "AI wrapper" era is obsessed with the prompt; I am obsessed with the pipeline. Generative AI is inherently non-deterministic, making it highly volatile for enterprise systems. I build for the edge cases. My approach focuses on rigorous guardrails, evaluation metrics, and error-handling hierarchies. I design systems that assume the AI will be wrong—and fail gracefully when it is. I am not interested in building toys that work 80% of the time; I am interested in building resilient, cost-optimized engines that form the backbone of a scalable product.
+                        The current "AI wrapper" era is obsessed with the prompt; I am obsessed with the pipeline.
+                        Generative AI is inherently non-deterministic, making it highly volatile for enterprise systems.
+                        I build for the edge cases. My approach focuses on rigorous guardrails, evaluation metrics, and
+                        error-handling hierarchies. I design systems that assume the AI will be wrong—and fail
+                        gracefully when it is. I am not interested in building toys that work 80% of the time; I am
+                        interested in building resilient, cost-optimized engines that form the backbone of a scalable
+                        product.
                     </p>
                 </div>
             </div>
@@ -413,7 +473,8 @@
             <div class="container">
                 <div class="contact-header">
                     <h2 class="section-title">Have an architectural bottleneck or a high-overhead workflow?</h2>
-                    <p class="contact-subtitle">Let’s discuss how to optimize your business operations through deterministic AI pipelines and strict unit economics.</p>
+                    <p class="contact-subtitle">Let’s discuss how to optimize your business operations through
+                        deterministic AI pipelines and strict unit economics.</p>
                 </div>
                 <div class="contact-grid">
                     <!-- Contact Form: Technical Consultation -->
@@ -488,20 +549,24 @@
         <div class="telemetry-container">
             <!-- Status dot -->
             <span class="telemetry-status-dot pulse" id="telemetry-status" title="Initializing Telemetry..."></span>
-            
+
             <!-- Metrics -->
             <div class="telemetry-metrics">
-                <span class="telemetry-label">Tokens Viewed: <span class="telemetry-value" id="token-count">0</span></span>
+                <span class="telemetry-label">Tokens Viewed: <span class="telemetry-value"
+                        id="token-count">0</span></span>
                 <span class="telemetry-divider">|</span>
-                <span class="telemetry-label">Simulated Cost: <span class="telemetry-value" id="compute-cost">$0.00000</span></span>
+                <span class="telemetry-label">Simulated Cost: <span class="telemetry-value"
+                        id="compute-cost">$0.00000</span></span>
             </div>
-            
+
             <!-- Toggle button -->
             <button class="telemetry-toggle-btn" id="telemetry-toggle-btn" aria-label="Toggle Telemetry Panel">
-                <svg class="toggle-icon-collapse" viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                <svg class="toggle-icon-collapse" viewBox="0 0 24 24" width="16" height="16" stroke="currentColor"
+                    stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round">
                     <polyline points="6 9 12 15 18 9"></polyline>
                 </svg>
-                <svg class="toggle-icon-expand" viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                <svg class="toggle-icon-expand" viewBox="0 0 24 24" width="16" height="16" stroke="currentColor"
+                    stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round">
                     <polyline points="18 15 12 9 6 15"></polyline>
                 </svg>
             </button>

@@ -510,4 +510,203 @@ document.addEventListener('DOMContentLoaded', () => {
     
     initTelemetry();
 
+    // --- Semantic Search (Client-Side RAG) ---
+    const initSemanticSearch = () => {
+        const searchInput = document.getElementById('semantic-search');
+        const resultsContainer = document.getElementById('search-results');
+        const loaderContainer = document.getElementById('search-loader-container');
+        const statusBadge = document.getElementById('search-status-badge');
+        
+        if (!searchInput || !resultsContainer || !loaderContainer || !statusBadge) return;
+        
+        let extractor = null;
+        let modelLoading = false;
+        let embeddingsData = null;
+        
+        // 1. Fetch static embeddings on load
+        const loadEmbeddings = async () => {
+            try {
+                const res = await fetch('./embeddings.json');
+                if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
+                embeddingsData = await res.json();
+                console.log("Semantic search embeddings loaded successfully!");
+            } catch (e) {
+                console.error("Failed to load semantic search embeddings:", e);
+                statusBadge.style.display = 'none';
+            }
+        };
+        
+        // 2. Lazy-load all-MiniLM-L6-v2 pipeline on focus
+        const loadModel = async () => {
+            if (extractor || modelLoading) return;
+            modelLoading = true;
+            
+            // UI Feedback: Loading
+            loaderContainer.style.display = 'flex';
+            statusBadge.classList.add('loading');
+            const statusText = statusBadge.querySelector('.status-text');
+            if (statusText) statusText.textContent = "Loading AI Model...";
+            
+            try {
+                // Dynamically import Xenova Transformers from CDN
+                const { pipeline, env } = await import('https://cdn.jsdelivr.net/npm/@xenova/transformers@2.17.1/dist/transformers.min.js');
+                env.allowLocalModels = false;
+                
+                extractor = await pipeline('feature-extraction', 'Xenova/all-MiniLM-L6-v2');
+                
+                // UI Feedback: Ready
+                statusBadge.classList.remove('loading');
+                statusBadge.classList.add('ready');
+                if (statusText) statusText.textContent = "AI Search Active";
+                console.log("Transformers.js pipeline initialized successfully!");
+            } catch (e) {
+                console.error("Failed to load edge AI model:", e);
+                statusBadge.classList.remove('loading');
+                if (statusText) statusText.textContent = "AI Offline";
+            } finally {
+                modelLoading = false;
+                loaderContainer.style.display = 'none';
+            }
+        };
+        
+        // Cosine Similarity function
+        const cosineSimilarity = (vecA, vecB) => {
+            let dotProduct = 0;
+            let normA = 0;
+            let normB = 0;
+            for (let i = 0; i < vecA.length; i++) {
+                dotProduct += vecA[i] * vecB[i];
+                normA += vecA[i] * vecA[i];
+                normB += vecB[i] * vecB[i];
+            }
+            if (normA === 0 || normB === 0) return 0;
+            return dotProduct / (Math.sqrt(normA) * Math.sqrt(normB));
+        };
+        
+        // Render search results in dropdown
+        const renderResults = (matches) => {
+            resultsContainer.innerHTML = '';
+            
+            if (matches.length === 0) {
+                resultsContainer.innerHTML = '<div class="search-no-results">No relevant matches found.</div>';
+                resultsContainer.style.display = 'block';
+                return;
+            }
+            
+            matches.forEach(match => {
+                const percentage = Math.round(match.similarity * 100);
+                
+                const card = document.createElement('div');
+                card.className = 'search-result-card';
+                card.innerHTML = `
+                    <div class="search-result-header">
+                        <span class="search-result-title">${match.title}</span>
+                        <span class="search-result-score">${percentage}% match</span>
+                    </div>
+                    <p class="search-result-snippet">${match.content.substring(0, 140)}${match.content.length > 140 ? '...' : ''}</p>
+                    <span class="search-result-action">Scroll to section &rarr;</span>
+                `;
+                
+                card.addEventListener('click', () => {
+                    const targetEl = document.getElementById(match.id);
+                    if (targetEl) {
+                        // Check if it's in a collapsed work experience card, expand it
+                        const collapsible = targetEl.querySelector('.collapsible');
+                        if (collapsible && !collapsible.classList.contains('expanded')) {
+                            collapsible.classList.add('expanded');
+                            const btn = collapsible.querySelector('.expand-btn');
+                            if (btn) btn.textContent = 'Show Less';
+                        }
+                        
+                        // Scroll smoothly to target element
+                        targetEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                        
+                        // Pulse animation to highlight target element
+                        targetEl.classList.add('highlight-pulse');
+                        setTimeout(() => {
+                            targetEl.classList.remove('highlight-pulse');
+                        }, 2500);
+                    }
+                    
+                    // Reset search field and dropdown
+                    searchInput.value = '';
+                    resultsContainer.innerHTML = '';
+                    resultsContainer.style.display = 'none';
+                });
+                
+                resultsContainer.appendChild(card);
+            });
+            
+            resultsContainer.style.display = 'block';
+        };
+        
+        // Perform semantic search query
+        const performSearch = async (queryText) => {
+            if (!extractor || !embeddingsData) return;
+            
+            try {
+                const output = await extractor(queryText, {
+                    pooling: 'mean',
+                    normalize: true
+                });
+                const queryVector = output.tolist()[0];
+                
+                // Compute similarity for all segments
+                const matches = embeddingsData.map(doc => {
+                    const similarity = cosineSimilarity(queryVector, doc.embedding);
+                    return {
+                        ...doc,
+                        similarity
+                    };
+                });
+                
+                // Sort by descending similarity and take top 2
+                matches.sort((a, b) => b.similarity - a.similarity);
+                
+                // Filter to reasonable threshold (e.g. similarity > 0.15) to avoid random matches
+                const filteredMatches = matches.filter(m => m.similarity > 0.15).slice(0, 2);
+                
+                renderResults(filteredMatches);
+            } catch (e) {
+                console.error("Semantic search processing error:", e);
+            }
+        };
+        
+        // Debounce helper (delay in ms)
+        const debounce = (func, delay) => {
+            let timeoutId;
+            return (...args) => {
+                if (timeoutId) clearTimeout(timeoutId);
+                timeoutId = setTimeout(() => {
+                    func.apply(null, args);
+                }, delay);
+            };
+        };
+        
+        // Event Listeners
+        searchInput.addEventListener('focus', loadModel);
+        
+        searchInput.addEventListener('input', debounce((e) => {
+            const val = e.target.value.trim();
+            if (val.length > 0) {
+                performSearch(val);
+            } else {
+                resultsContainer.innerHTML = '';
+                resultsContainer.style.display = 'none';
+            }
+        }, 400));
+        
+        // Close dropdown when clicking outside
+        document.addEventListener('click', (e) => {
+            if (!searchInput.contains(e.target) && !resultsContainer.contains(e.target)) {
+                resultsContainer.style.display = 'none';
+            }
+        });
+        
+        // Initialize fetch
+        loadEmbeddings();
+    };
+    
+    initSemanticSearch();
+
 });
