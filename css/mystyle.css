@@ -1777,6 +1777,30 @@ html[data-theme="dark"] .theme-toggle .moon-icon {
     border-bottom: 1px solid var(--border-color);
 }
 
+.photo-attribution {
+    position: absolute;
+    bottom: 8px;
+    right: 8px;
+    background-color: rgba(18, 17, 16, 0.65);
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+    color: #FAF9F5;
+    font-size: 0.6875rem;
+    font-weight: 500;
+    padding: 3px 8px;
+    border-radius: var(--radius-sm);
+    pointer-events: none;
+    max-width: 90%;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    transition: opacity var(--transition-fast);
+}
+
+.writing-card:hover .photo-attribution {
+    opacity: 0.85;
+}
+
 .writing-thumbnail {
     width: 100%;
     height: 100%;

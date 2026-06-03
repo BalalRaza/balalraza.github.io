@@ -318,17 +318,33 @@ document.addEventListener('DOMContentLoaded', () => {
                         }
                     }
 
-                    // Format & clean description snippet
-                    let description = '';
-                    if (post.description) {
-                        description = post.description
-                            .replace(/<[^>]*>/g, '') // strip HTML
-                            .replace(/\s+/g, ' ')    // normalize spacing
-                            .trim();
-                        // Truncate to a reasonable character length for a snippet
-                        if (description.length > 140) {
-                            description = description.slice(0, 137) + '...';
+                    // Format & clean description snippet, extracting photo attribution if present
+                    let cleanDescription = post.description || '';
+                    let photoAttribution = '';
+                    
+                    const figcaptionMatch = cleanDescription.match(/<figcaption>([\s\S]*?)<\/figcaption>/i);
+                    if (figcaptionMatch) {
+                        photoAttribution = figcaptionMatch[1].replace(/<[^>]*>/g, '').replace(/\s+/g, ' ').trim();
+                        // Remove the figure/figcaption entirely from the description before stripping HTML
+                        cleanDescription = cleanDescription.replace(/<figure>[\s\S]*?<\/figure>/i, '');
+                    }
+                    
+                    let description = cleanDescription
+                        .replace(/<[^>]*>/g, '') // strip HTML
+                        .replace(/\s+/g, ' ')    // normalize spacing
+                        .trim();
+                    
+                    if (!photoAttribution) {
+                        const attributionMatch = description.match(/^(Photo by\s+.*?on\s+Unsplash)/i);
+                        if (attributionMatch) {
+                            photoAttribution = attributionMatch[1];
+                            description = description.substring(photoAttribution.length).trim();
                         }
+                    }
+                    
+                    // Truncate to a reasonable character length for a snippet
+                    if (description.length > 140) {
+                        description = description.slice(0, 137) + '...';
                     }
 
                     // Card template
@@ -355,6 +371,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     card.innerHTML = `
                         <div class="writing-thumbnail-wrapper">
                             ${thumbnailHtml}
+                            ${photoAttribution ? `<span class="photo-attribution">${photoAttribution}</span>` : ''}
                         </div>
                         <div class="writing-content">
                             <div class="writing-meta">
