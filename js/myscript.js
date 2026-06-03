@@ -71,10 +71,11 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // --- Contact Form Handling & Validation ---
+    let contactIntent = 'not_classified';
     const contactForm = document.getElementById('contact-form');
     const formName = document.getElementById('form-name');
     const formEmail = document.getElementById('form-email');
-    const formMessage = document.getElementById('form-message');
+    const contactMessage = document.getElementById('contact-message');
     const submitBtn = document.getElementById('submit-btn');
 
     // Modals
@@ -103,7 +104,7 @@ document.addEventListener('DOMContentLoaded', () => {
         };
 
         // Live input feedback (clears error states when user types)
-        [formName, formEmail, formMessage].forEach(input => {
+        [formName, formEmail, contactMessage].forEach(input => {
             input.addEventListener('input', () => {
                 const group = input.closest('.form-group');
                 group.classList.remove('invalid');
@@ -117,7 +118,7 @@ document.addEventListener('DOMContentLoaded', () => {
             // Run validation
             const isNameValid = validateInput(formName, isNotEmpty);
             const isEmailValid = validateInput(formEmail, isValidEmail);
-            const isMessageValid = validateInput(formMessage, isNotEmpty);
+            const isMessageValid = validateInput(contactMessage, isNotEmpty);
 
             if (isNameValid && isEmailValid && isMessageValid) {
                 // Form is valid! Set to loading state
@@ -125,7 +126,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 submitBtn.disabled = true;
                 formName.disabled = true;
                 formEmail.disabled = true;
-                formMessage.disabled = true;
+                contactMessage.disabled = true;
 
                 // Helper to reset loading state
                 const resetFormLoading = () => {
@@ -133,7 +134,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     submitBtn.disabled = false;
                     formName.disabled = false;
                     formEmail.disabled = false;
-                    formMessage.disabled = false;
+                    contactMessage.disabled = false;
                 };
 
                 // Helper to show success modal
@@ -154,7 +155,13 @@ document.addEventListener('DOMContentLoaded', () => {
                     return;
                 }
 
-                // Send data to Web3Forms
+                // Send data to Web3Forms (with dynamic subject line to facilitate email filtering)
+                const subjectLine = contactIntent === 'generic spam'
+                    ? '[SPAM] New Contact Inquiry'
+                    : contactIntent === 'engineering consulting'
+                    ? '[High-Value] New Contact Inquiry'
+                    : 'New Contact Inquiry';
+
                 fetch("https://api.web3forms.com/submit", {
                     method: 'POST',
                     headers: {
@@ -163,9 +170,11 @@ document.addEventListener('DOMContentLoaded', () => {
                     },
                     body: JSON.stringify({
                         access_key: WEB3FORMS_ACCESS_KEY,
+                        subject: subjectLine,
                         name: formName.value.trim(),
                         email: formEmail.value.trim(),
-                        message: formMessage.value.trim()
+                        message: contactMessage.value.trim(),
+                        intent: contactIntent
                     })
                 })
                     .then(response => {
@@ -752,5 +761,114 @@ document.addEventListener('DOMContentLoaded', () => {
     };
     
     initSemanticSearch();
+
+    // --- Contact Form Edge AI Classification ---
+    const initContactClassification = () => {
+        const contactMessage = document.getElementById('contact-message');
+        const intentBadge = document.getElementById('intent-badge');
+        
+        if (!contactMessage || !intentBadge) return;
+
+        let classifier = null;
+        let modelLoading = false;
+        let debounceTimeout = null;
+
+        // Lazy-load zero-shot-classification pipeline on first focus
+        const loadClassifier = async () => {
+            if (classifier || modelLoading) return;
+            modelLoading = true;
+
+            // Update badge UI to show initialization loading
+            intentBadge.classList.remove('badge-hidden', 'badge-high-value', 'badge-generic');
+            intentBadge.classList.add('badge-loading');
+            intentBadge.textContent = "Loading edge classification model...";
+
+            try {
+                // Dynamic import pipeline and env from CDN
+                const { pipeline, env } = await import('https://cdn.jsdelivr.net/npm/@xenova/transformers@2.17.1');
+                env.allowLocalModels = false;
+
+                classifier = await pipeline('zero-shot-classification', 'Xenova/mobilebert-uncased-mnli');
+                console.log("Edge classification pipeline loaded successfully!");
+
+                // Once loaded, immediately trigger classification check on existing text
+                runClassification();
+            } catch (e) {
+                console.error("Failed to load edge classification model:", e);
+                // On error, hide the badge so it doesn't block the UI
+                intentBadge.classList.remove('badge-loading');
+                intentBadge.classList.add('badge-hidden');
+            } finally {
+                modelLoading = false;
+            }
+        };
+
+        const runClassification = async () => {
+            const text = contactMessage.value.trim();
+
+            // If length is 20 or less, hide the badge
+            if (text.length <= 20) {
+                intentBadge.classList.remove('badge-loading', 'badge-high-value', 'badge-generic');
+                intentBadge.classList.add('badge-hidden');
+                contactIntent = 'not_classified';
+                return;
+            }
+
+            // If classifier is not loaded yet, don't run classification (it will run once loaded)
+            if (!classifier) return;
+
+            // Update badge UI to processing state
+            intentBadge.classList.remove('badge-hidden', 'badge-high-value', 'badge-generic');
+            intentBadge.classList.add('badge-loading');
+            intentBadge.textContent = "Edge Intent: Analyzing...";
+
+            try {
+                const result = await classifier(text, ['engineering consulting', 'recruiter outreach', 'generic spam']);
+                const topLabel = result.labels[0];
+
+                intentBadge.classList.remove('badge-loading');
+                
+                if (topLabel === 'engineering consulting') {
+                    intentBadge.classList.add('badge-high-value');
+                    intentBadge.textContent = "[ Edge Intent: High-Value Engineering Query ]";
+                    contactIntent = 'engineering consulting';
+                } else if (topLabel === 'recruiter outreach') {
+                    intentBadge.classList.add('badge-generic');
+                    intentBadge.textContent = "[ Edge Intent: Standard Outreach Detected ]";
+                    contactIntent = 'recruiter outreach';
+                } else {
+                    intentBadge.classList.add('badge-generic');
+                    intentBadge.textContent = "[ Edge Intent: Spam / Irrelevant Content Detected ]";
+                    contactIntent = 'generic spam';
+                }
+            } catch (e) {
+                console.error("Edge classification processing error:", e);
+                intentBadge.classList.remove('badge-loading');
+                intentBadge.classList.add('badge-hidden');
+            }
+        };
+
+        const formName = document.getElementById('form-name');
+        const formEmail = document.getElementById('form-email');
+
+        // Attach event listeners to start model loading on any input focus
+        [formName, formEmail, contactMessage].forEach(input => {
+            if (input) {
+                input.addEventListener('focus', () => {
+                    loadClassifier();
+                });
+            }
+        });
+
+        contactMessage.addEventListener('input', () => {
+            // Debounce classification to prevent UI thread lockups
+            if (debounceTimeout) clearTimeout(debounceTimeout);
+            debounceTimeout = setTimeout(() => {
+                runClassification();
+            }, 800);
+        });
+    };
+
+    initContactClassification();
 
 });
