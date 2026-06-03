@@ -519,6 +519,25 @@ document.addEventListener('DOMContentLoaded', () => {
     
     initTelemetry();
 
+    // --- Shared Edge AI Model Loader ---
+    let sharedExtractor = null;
+    let sharedModelLoadingPromise = null;
+
+    const getSharedExtractor = async () => {
+        if (sharedExtractor) return sharedExtractor;
+        if (sharedModelLoadingPromise) return sharedModelLoadingPromise;
+
+        sharedModelLoadingPromise = (async () => {
+            console.log("Downloading/Initializing shared edge AI model pipeline...");
+            const { pipeline, env } = await import('https://cdn.jsdelivr.net/npm/@xenova/transformers@2.17.1/dist/transformers.min.js');
+            env.allowLocalModels = false;
+            sharedExtractor = await pipeline('feature-extraction', 'Xenova/all-MiniLM-L6-v2');
+            return sharedExtractor;
+        })();
+
+        return sharedModelLoadingPromise;
+    };
+
     // --- Semantic Search (Client-Side RAG) ---
     const initSemanticSearch = () => {
         const searchInput = document.getElementById('semantic-search');
@@ -537,7 +556,8 @@ document.addEventListener('DOMContentLoaded', () => {
         // 1. Fetch static embeddings on load
         const loadEmbeddings = async () => {
             try {
-                const res = await fetch('./embeddings.json');
+                const rootPath = document.querySelector('script[src*="myscript.js"]').getAttribute('src').replace('js/myscript.js', '');
+                const res = await fetch(rootPath + 'embeddings.json');
                 if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
                 embeddingsData = await res.json();
                 console.log("Semantic search embeddings loaded successfully!");
@@ -559,19 +579,16 @@ document.addEventListener('DOMContentLoaded', () => {
             if (statusText) statusText.textContent = "Loading AI Model...";
             
             try {
-                // Dynamically import Xenova Transformers from CDN
-                const { pipeline, env } = await import('https://cdn.jsdelivr.net/npm/@xenova/transformers@2.17.1/dist/transformers.min.js');
-                env.allowLocalModels = false;
-                
-                extractor = await pipeline('feature-extraction', 'Xenova/all-MiniLM-L6-v2');
+                // Get the shared extractor instance
+                extractor = await getSharedExtractor();
                 
                 // UI Feedback: Ready
                 statusBadge.classList.remove('loading');
                 statusBadge.classList.add('ready');
                 if (statusText) statusText.textContent = "AI Search Active";
-                console.log("Transformers.js pipeline initialized successfully!");
+                console.log("Transformers.js pipeline initialized successfully in search!");
             } catch (e) {
-                console.error("Failed to load edge AI model:", e);
+                console.error("Failed to load edge AI model in search:", e);
                 statusBadge.classList.remove('loading');
                 if (statusText) statusText.textContent = "AI Offline";
             } finally {
