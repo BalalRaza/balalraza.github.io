@@ -779,6 +779,252 @@ document.addEventListener('DOMContentLoaded', () => {
     
     initSemanticSearch();
 
+    // --- Jargon Decoder (Explain like a Founder) ---
+    const initJargonDecoder = () => {
+        const toggleInputs = document.querySelectorAll('.jargon-toggle-input');
+        const jargonTerms = document.querySelectorAll('.jargon-term');
+        const tooltip = document.getElementById('jargon-tooltip');
+        
+        if (toggleInputs.length === 0 || jargonTerms.length === 0 || !tooltip) return;
+        
+        const arrow = tooltip.querySelector('.tooltip-arrow');
+        const titleEl = tooltip.querySelector('.tooltip-title');
+        const translationEl = tooltip.querySelector('.tooltip-translation');
+        
+        let dictionaryData = null;
+        let isJargonModeActive = false;
+        
+        // 1. Fetch static jargon dictionary
+        const loadDictionary = async () => {
+            try {
+                const rootPath = document.querySelector('script[src*="myscript.js"]').getAttribute('src').replace('js/myscript.js', '');
+                const res = await fetch(rootPath + 'jargon-dictionary.json');
+                if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
+                dictionaryData = await res.json();
+                console.log("Jargon dictionary loaded successfully!");
+            } catch (e) {
+                console.error("Failed to load jargon dictionary:", e);
+            }
+        };
+        
+        // 2. Synchronize toggle checkboxes and handle active state changes
+        const setJargonMode = (active) => {
+            isJargonModeActive = active;
+            
+            // Sync all inputs
+            toggleInputs.forEach(input => {
+                input.checked = active;
+            });
+            
+            localStorage.setItem('jargonMode', active);
+            
+            if (active) {
+                document.body.classList.add('jargon-mode-active');
+                // Preload model in background when turned on
+                getSharedExtractor().catch(err => console.error("Error preloading model for jargon decoder:", err));
+            } else {
+                document.body.classList.remove('jargon-mode-active');
+                hideTooltip();
+            }
+        };
+        
+        toggleInputs.forEach(input => {
+            input.addEventListener('change', (e) => {
+                setJargonMode(e.target.checked);
+            });
+        });
+        
+        // Cosine similarity helper
+        const cosineSimilarity = (vecA, vecB) => {
+            let dotProduct = 0;
+            let normA = 0;
+            let normB = 0;
+            for (let i = 0; i < vecA.length; i++) {
+                dotProduct += vecA[i] * vecB[i];
+                normA += vecA[i] * vecA[i];
+                normB += vecB[i] * vecB[i];
+            }
+            if (normA === 0 || normB === 0) return 0;
+            return dotProduct / (Math.sqrt(normA) * Math.sqrt(normB));
+        };
+        
+        // Tooltip hide / show functions
+        const showTooltip = (termEl, initialContentHtml) => {
+            tooltip.className = 'active'; // Reset hidden classes
+            titleEl.textContent = "";
+            translationEl.innerHTML = initialContentHtml;
+            
+            positionTooltip(termEl);
+        };
+        
+        const updateTooltip = (termText, translation) => {
+            titleEl.textContent = termText;
+            translationEl.textContent = translation;
+            
+            // Re-position because text height may have changed
+            const activeTerm = document.querySelector('.jargon-term.active-target');
+            if (activeTerm) {
+                positionTooltip(activeTerm);
+            }
+        };
+        
+        const hideTooltip = () => {
+            tooltip.classList.remove('active');
+            tooltip.classList.add('tooltip-hidden');
+            jargonTerms.forEach(t => t.classList.remove('active-target'));
+        };
+        
+        const positionTooltip = (termEl) => {
+            const rect = termEl.getBoundingClientRect();
+            const scrollLeft = window.pageXOffset || document.documentElement.scrollLeft;
+            const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+            
+            const tooltipWidth = tooltip.offsetWidth;
+            const tooltipHeight = tooltip.offsetHeight;
+            
+            // Default position: above the term
+            let top = rect.top + scrollTop - tooltipHeight - 12;
+            let left = rect.left + scrollLeft + (rect.width - tooltipWidth) / 2;
+            
+            // Responsive mobile boundaries check
+            const margin = 16;
+            if (left < margin) {
+                left = margin;
+            } else if (left + tooltipWidth > window.innerWidth - margin) {
+                left = window.innerWidth - tooltipWidth - margin;
+            }
+            
+            // Overflow top boundary check (if it overflows top of screen, display below the term)
+            const arrowOffset = 6.5;
+            if (rect.top - tooltipHeight - 12 < 0) {
+                top = rect.bottom + scrollTop + 12;
+                
+                // Position arrow pointing up
+                arrow.style.top = `-${arrowOffset}px`;
+                arrow.style.bottom = 'auto';
+                arrow.style.borderBottom = 'none';
+                arrow.style.borderRight = 'none';
+                arrow.style.borderTop = '1.5px solid var(--pastel-orange-text)';
+                arrow.style.borderLeft = '1.5px solid var(--pastel-orange-text)';
+            } else {
+                // Position arrow pointing down
+                arrow.style.bottom = `-${arrowOffset}px`;
+                arrow.style.top = 'auto';
+                arrow.style.borderTop = 'none';
+                arrow.style.borderLeft = 'none';
+                arrow.style.borderBottom = '1.5px solid var(--pastel-orange-text)';
+                arrow.style.borderRight = '1.5px solid var(--pastel-orange-text)';
+            }
+            
+            // Align the arrow with the horizontal center of the target term
+            const arrowLeft = rect.left + scrollLeft + rect.width / 2 - left - arrowOffset;
+            arrow.style.left = `${arrowLeft}px`;
+            
+            tooltip.style.top = `${top}px`;
+            tooltip.style.left = `${left}px`;
+        };
+        
+        // Handle term tap / click events
+        jargonTerms.forEach(termEl => {
+            const handleInteraction = async (e) => {
+                if (!isJargonModeActive) return;
+                e.preventDefault();
+                e.stopPropagation();
+                
+                // Clear previous active states
+                jargonTerms.forEach(t => t.classList.remove('active-target'));
+                termEl.classList.add('active-target');
+                
+                const text = termEl.innerText.trim();
+                
+                // Show loading state in tooltip
+                const loadingHtml = `
+                    <div class="tooltip-loading">
+                        <svg class="spinner" viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="3" fill="none">
+                            <circle cx="12" cy="12" r="10" stroke-opacity="0.25"></circle>
+                            <path d="M12 2a10 10 0 0 1 10 10" stroke-linecap="round"></path>
+                        </svg>
+                        <span>Translating term at the edge...</span>
+                    </div>
+                `;
+                showTooltip(termEl, loadingHtml);
+                
+                try {
+                    // 1. Get the shared model pipeline extractor
+                    const extractor = await getSharedExtractor();
+                    
+                    // 2. Extract embedding for the clicked term text
+                    const output = await extractor(text, {
+                        pooling: 'mean',
+                        normalize: true
+                    });
+                    const termVector = output.tolist()[0];
+                    
+                    // 3. Find closest dictionary match using cosine similarity
+                    if (!dictionaryData || dictionaryData.length === 0) {
+                        updateTooltip(text, "Failed to load jargon translation dictionary.");
+                        return;
+                    }
+                    
+                    let bestMatch = null;
+                    let bestScore = -1;
+                    
+                    for (const dictItem of dictionaryData) {
+                        const score = cosineSimilarity(termVector, dictItem.embedding);
+                        if (score > bestScore) {
+                            bestScore = score;
+                            bestMatch = dictItem;
+                        }
+                    }
+                    
+                    // Display result if a good match exists (similarity threshold > 0.6)
+                    if (bestMatch && bestScore > 0.6) {
+                        updateTooltip(bestMatch.technical_term, bestMatch.translation);
+                    } else {
+                        updateTooltip(text, `No simple translation found for this term (Confidence: ${Math.round(bestScore * 100)}%).`);
+                    }
+                    
+                } catch (err) {
+                    console.error("Jargon decoding error:", err);
+                    updateTooltip(text, "Error running translation model at the edge. Please try again.");
+                }
+            };
+            
+            termEl.addEventListener('click', handleInteraction);
+            termEl.addEventListener('touchend', handleInteraction);
+        });
+        
+        // 3. Dismiss tooltip triggers
+        document.addEventListener('click', (e) => {
+            if (!tooltip.contains(e.target) && !e.target.classList.contains('jargon-term')) {
+                hideTooltip();
+            }
+        });
+        
+        document.addEventListener('scroll', () => {
+            if (tooltip.classList.contains('active')) {
+                hideTooltip();
+            }
+        }, { passive: true });
+        
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && tooltip.classList.contains('active')) {
+                hideTooltip();
+            }
+        });
+        
+        // Load the dictionary dataset
+        loadDictionary();
+        
+        // Restore persistent state
+        const savedJargonMode = localStorage.getItem('jargonMode') === 'true';
+        if (savedJargonMode) {
+            setJargonMode(true);
+        }
+    };
+
+    initJargonDecoder();
+
     // --- Contact Form Edge AI Classification ---
     const initContactClassification = () => {
         const contactMessage = document.getElementById('contact-message');
