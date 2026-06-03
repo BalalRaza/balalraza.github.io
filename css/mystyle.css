@@ -1717,6 +1717,37 @@ html[data-theme="dark"] .theme-toggle .moon-icon {
     gap: 24px;
 }
 
+.writing-grid.single-post {
+    display: block;
+    max-width: 840px;
+    margin: 0 auto;
+}
+
+.writing-grid.single-post .writing-card {
+    flex-direction: row;
+    align-items: stretch;
+}
+
+.writing-grid.single-post .writing-thumbnail-wrapper {
+    width: 40%;
+    aspect-ratio: auto;
+    height: auto;
+    border-bottom: none;
+    border-right: 1px solid var(--border-color);
+}
+
+.writing-grid.single-post .writing-thumbnail {
+    height: 100%;
+    width: 100%;
+    object-fit: cover;
+}
+
+.writing-grid.single-post .writing-content {
+    width: 60%;
+    padding: 36px;
+    justify-content: center;
+}
+
 .writing-card {
     background-color: var(--bg-secondary);
     border: 1px solid var(--border-color);
@@ -2046,6 +2077,22 @@ html[data-theme="dark"] .theme-toggle .moon-icon {
         flex-direction: column;
         gap: 16px;
         text-align: center;
+    }
+
+    .writing-grid.single-post .writing-card {
+        flex-direction: column;
+    }
+    
+    .writing-grid.single-post .writing-thumbnail-wrapper {
+        width: 100%;
+        aspect-ratio: 16 / 9;
+        border-right: none;
+        border-bottom: 1px solid var(--border-color);
+    }
+    
+    .writing-grid.single-post .writing-content {
+        width: 100%;
+        padding: 24px;
     }
 }
 

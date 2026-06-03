@@ -288,6 +288,13 @@ document.addEventListener('DOMContentLoaded', () => {
                         return isNaN(year) || (year !== 2017 && year !== 2018);
                     })
                     .slice(0, 3);
+
+                if (posts.length === 1) {
+                    writingGrid.classList.add('single-post');
+                } else {
+                    writingGrid.classList.remove('single-post');
+                }
+
                 writingGrid.innerHTML = ''; // Clear skeleton or default text
 
                 const tagClasses = ['tag-indigo', 'tag-sky', 'tag-purple', 'tag-emerald', 'tag-orange'];
