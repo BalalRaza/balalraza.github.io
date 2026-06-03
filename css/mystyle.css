@@ -2558,6 +2558,94 @@ html[data-theme="dark"] .search-result-card:hover {
     }
 }
 
+/* Help Button & Tooltip */
+.search-help-btn {
+    background: none;
+    border: none;
+    padding: 6px;
+    color: var(--text-muted);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    transition: var(--transition-fast);
+    flex-shrink: 0;
+    outline: none;
+}
+
+.search-help-btn:hover,
+.search-help-btn:focus-visible {
+    color: var(--pastel-orange-text);
+    background-color: var(--bg-tertiary);
+}
+
+.search-tooltip-container {
+    position: absolute;
+    bottom: calc(100% + 12px);
+    right: 0;
+    width: 320px;
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
+    padding: 16px;
+    box-shadow: var(--shadow-hover);
+    z-index: 60;
+    display: none;
+    flex-direction: column;
+    gap: 8px;
+    animation: tooltipSlideUp 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.search-tooltip-container.active {
+    display: flex;
+}
+
+.search-tooltip-arrow {
+    position: absolute;
+    bottom: -6px;
+    right: 26px;
+    width: 10px;
+    height: 10px;
+    background: var(--bg-secondary);
+    border-right: 1px solid var(--border-color);
+    border-bottom: 1px solid var(--border-color);
+    transform: rotate(45deg);
+    z-index: 5;
+}
+
+.search-tooltip-title {
+    font-family: var(--font-title);
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin: 0;
+}
+
+.search-tooltip-text {
+    font-family: var(--font-sans);
+    font-size: 0.85rem;
+    line-height: 1.45;
+    color: var(--text-secondary);
+    margin: 0;
+    text-align: left;
+}
+
+.search-tooltip-text strong {
+    color: var(--pastel-orange-text);
+}
+
+@keyframes tooltipSlideUp {
+    from {
+        opacity: 0;
+        transform: translateY(8px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
 /* Mobile responsive padding & height touch target adjustments */
 @media (max-width: 480px) {
     .search-bar-container {
@@ -2570,5 +2658,10 @@ html[data-theme="dark"] .search-result-card:hover {
     
     .search-status-badge {
         display: none; /* Hide badge to save horizontal space on mobile */
+    }
+
+    .search-tooltip-container {
+        width: calc(100vw - 48px);
+        right: 0px;
     }
 }

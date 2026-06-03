@@ -516,6 +516,8 @@ document.addEventListener('DOMContentLoaded', () => {
         const resultsContainer = document.getElementById('search-results');
         const loaderContainer = document.getElementById('search-loader-container');
         const statusBadge = document.getElementById('search-status-badge');
+        const helpBtn = document.getElementById('search-help-btn');
+        const tooltipContainer = document.getElementById('search-tooltip-container');
         
         if (!searchInput || !resultsContainer || !loaderContainer || !statusBadge) return;
         
@@ -684,11 +686,22 @@ document.addEventListener('DOMContentLoaded', () => {
         };
         
         // Event Listeners
-        searchInput.addEventListener('focus', loadModel);
+        searchInput.addEventListener('focus', () => {
+            loadModel();
+            if (tooltipContainer) {
+                tooltipContainer.classList.remove('active');
+                if (helpBtn) helpBtn.setAttribute('aria-expanded', 'false');
+            }
+        });
         
         searchInput.addEventListener('input', debounce((e) => {
             const val = e.target.value.trim();
             if (val.length > 0) {
+                // Close tooltip if open when typing
+                if (tooltipContainer) {
+                    tooltipContainer.classList.remove('active');
+                    if (helpBtn) helpBtn.setAttribute('aria-expanded', 'false');
+                }
                 performSearch(val);
             } else {
                 resultsContainer.innerHTML = '';
@@ -696,10 +709,41 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         }, 400));
         
-        // Close dropdown when clicking outside
+        // Help Tooltip Toggle
+        if (helpBtn && tooltipContainer) {
+            helpBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                const isActive = tooltipContainer.classList.contains('active');
+                if (isActive) {
+                    tooltipContainer.classList.remove('active');
+                    helpBtn.setAttribute('aria-expanded', 'false');
+                } else {
+                    // Close search results dropdown
+                    resultsContainer.innerHTML = '';
+                    resultsContainer.style.display = 'none';
+                    
+                    tooltipContainer.classList.add('active');
+                    helpBtn.setAttribute('aria-expanded', 'true');
+                }
+            });
+            
+            // Close tooltip on Escape key
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape') {
+                    tooltipContainer.classList.remove('active');
+                    helpBtn.setAttribute('aria-expanded', 'false');
+                }
+            });
+        }
+        
+        // Close dropdown & tooltip when clicking outside
         document.addEventListener('click', (e) => {
             if (!searchInput.contains(e.target) && !resultsContainer.contains(e.target)) {
                 resultsContainer.style.display = 'none';
+            }
+            if (tooltipContainer && helpBtn && !tooltipContainer.contains(e.target) && !helpBtn.contains(e.target)) {
+                tooltipContainer.classList.remove('active');
+                helpBtn.setAttribute('aria-expanded', 'false');
             }
         });
         
