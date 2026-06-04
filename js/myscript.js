@@ -1029,12 +1029,20 @@ document.addEventListener('DOMContentLoaded', () => {
     const initContactClassification = () => {
         const contactMessage = document.getElementById('contact-message');
         const intentBadge = document.getElementById('intent-badge');
+        const contactStatusBadge = document.getElementById('contact-status-badge');
         
         if (!contactMessage || !intentBadge) return;
 
         let classifier = null;
         let modelLoading = false;
         let debounceTimeout = null;
+
+        const updateStatusBadge = (state, text) => {
+            if (!contactStatusBadge) return;
+            contactStatusBadge.className = `contact-status-badge ${state}`;
+            const textNode = contactStatusBadge.querySelector('.status-text');
+            if (textNode) textNode.textContent = text;
+        };
 
         // Lazy-load zero-shot-classification pipeline on first focus
         const loadClassifier = async () => {
@@ -1045,6 +1053,7 @@ document.addEventListener('DOMContentLoaded', () => {
             intentBadge.classList.remove('badge-hidden', 'badge-high-value', 'badge-generic');
             intentBadge.classList.add('badge-loading');
             intentBadge.textContent = "Loading edge classification model...";
+            updateStatusBadge('loading', 'Loading AI Model...');
 
             try {
                 // Dynamic import pipeline and env from CDN
@@ -1053,6 +1062,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
                 classifier = await pipeline('zero-shot-classification', 'Xenova/mobilebert-uncased-mnli');
                 console.log("Edge classification pipeline loaded successfully!");
+                updateStatusBadge('ready', 'Intent Filter Active');
 
                 // Once loaded, immediately trigger classification check on existing text
                 runClassification();
@@ -1061,6 +1071,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 // On error, hide the badge so it doesn't block the UI
                 intentBadge.classList.remove('badge-loading');
                 intentBadge.classList.add('badge-hidden');
+                updateStatusBadge('', 'B.S. Intent Filter Standby');
             } finally {
                 modelLoading = false;
             }
@@ -1074,6 +1085,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 intentBadge.classList.remove('badge-loading', 'badge-high-value', 'badge-generic');
                 intentBadge.classList.add('badge-hidden');
                 contactIntent = 'not_classified';
+                if (classifier) {
+                    updateStatusBadge('ready', 'Intent Filter Active');
+                } else {
+                    updateStatusBadge('', 'B.S. Intent Filter Standby');
+                }
                 return;
             }
 
@@ -1084,6 +1100,7 @@ document.addEventListener('DOMContentLoaded', () => {
             intentBadge.classList.remove('badge-hidden', 'badge-high-value', 'badge-generic');
             intentBadge.classList.add('badge-loading');
             intentBadge.textContent = "Edge Intent: Analyzing...";
+            updateStatusBadge('loading', 'Analyzing Intent...');
 
             try {
                 const result = await classifier(text, ['engineering consulting', 'recruiter outreach', 'generic spam']);
@@ -1095,19 +1112,23 @@ document.addEventListener('DOMContentLoaded', () => {
                     intentBadge.classList.add('badge-high-value');
                     intentBadge.textContent = "[ Edge Intent: High-Value Engineering Query ]";
                     contactIntent = 'engineering consulting';
+                    updateStatusBadge('high-value', 'High-Value Intent Detected');
                 } else if (topLabel === 'recruiter outreach') {
                     intentBadge.classList.add('badge-generic');
                     intentBadge.textContent = "[ Edge Intent: Standard Outreach Detected ]";
                     contactIntent = 'recruiter outreach';
+                    updateStatusBadge('generic', 'Standard Outreach Detected');
                 } else {
                     intentBadge.classList.add('badge-generic');
                     intentBadge.textContent = "[ Edge Intent: Spam / Irrelevant Content Detected ]";
                     contactIntent = 'generic spam';
+                    updateStatusBadge('generic', 'Spam / Irrelevant Detected');
                 }
             } catch (e) {
                 console.error("Edge classification processing error:", e);
                 intentBadge.classList.remove('badge-loading');
                 intentBadge.classList.add('badge-hidden');
+                updateStatusBadge('ready', 'Intent Filter Active');
             }
         };
 
@@ -1133,5 +1154,169 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     initContactClassification();
+
+    // --- Contact Form Help Tooltip Logic ---
+    const initContactHelpTooltip = () => {
+        const helpBtn = document.getElementById('contact-help-btn');
+        const tooltipContainer = document.getElementById('contact-tooltip-container');
+        
+        if (!helpBtn || !tooltipContainer) return;
+        
+        helpBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            const isActive = tooltipContainer.classList.contains('active');
+            if (isActive) {
+                tooltipContainer.classList.remove('active');
+                helpBtn.setAttribute('aria-expanded', 'false');
+            } else {
+                // Close search tooltip if open
+                const searchTooltip = document.getElementById('search-tooltip-container');
+                const searchHelpBtn = document.getElementById('search-help-btn');
+                if (searchTooltip) searchTooltip.classList.remove('active');
+                if (searchHelpBtn) searchHelpBtn.setAttribute('aria-expanded', 'false');
+
+                tooltipContainer.classList.add('active');
+                helpBtn.setAttribute('aria-expanded', 'true');
+            }
+        });
+        
+        // Close tooltip on Escape key
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                tooltipContainer.classList.remove('active');
+                helpBtn.setAttribute('aria-expanded', 'false');
+            }
+        });
+        
+        // Close tooltip when clicking outside
+        document.addEventListener('click', (e) => {
+            if (!tooltipContainer.contains(e.target) && !helpBtn.contains(e.target)) {
+                tooltipContainer.classList.remove('active');
+                helpBtn.setAttribute('aria-expanded', 'false');
+            }
+        });
+    };
+    
+    initContactHelpTooltip();
+
+    // --- Edge AI Features Showcase Guided Tour ---
+    const initEdgeShowcaseTour = () => {
+        const btnSearch = document.getElementById('btn-showcase-search');
+        const btnJargon = document.getElementById('btn-showcase-jargon');
+        const btnFilter = document.getElementById('btn-showcase-filter');
+        
+        // 1. Search Showcase Tour
+        if (btnSearch) {
+            btnSearch.addEventListener('click', () => {
+                const searchInput = document.getElementById('semantic-search');
+                const tooltipContainer = document.getElementById('search-tooltip-container');
+                const helpBtn = document.getElementById('search-help-btn');
+                
+                if (searchInput) {
+                    // Scroll search wrapper into view
+                    const searchWrapper = document.querySelector('.search-section-wrapper');
+                    if (searchWrapper) {
+                        searchWrapper.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                        searchWrapper.classList.add('highlight-pulse-orange');
+                        setTimeout(() => {
+                            searchWrapper.classList.remove('highlight-pulse-orange');
+                        }, 3000);
+                    }
+                    
+                    searchInput.focus();
+                    
+                    // Show tooltip explanation
+                    if (tooltipContainer && helpBtn) {
+                        tooltipContainer.classList.add('active');
+                        helpBtn.setAttribute('aria-expanded', 'true');
+                    }
+                }
+            });
+        }
+        
+        // 2. Jargon Decoder Showcase Tour
+        if (btnJargon) {
+            btnJargon.addEventListener('click', () => {
+                // Toggles Explain like a Founder on (if not checked)
+                const jargonInputs = document.querySelectorAll('.jargon-toggle-input');
+                const jargonToggles = document.querySelectorAll('.jargon-toggle-label');
+                
+                // Get the setJargonMode equivalent by just clicking the input if unchecked
+                jargonInputs.forEach(input => {
+                    if (!input.checked) {
+                        input.click();
+                    }
+                });
+                
+                // Highlight/pulse the jargon toggle switches
+                jargonToggles.forEach(toggle => {
+                    toggle.classList.add('highlight-pulse-purple');
+                    setTimeout(() => {
+                        toggle.classList.remove('highlight-pulse-purple');
+                    }, 3000);
+                });
+                
+                // Scroll to the first case study card that has jargon terms
+                const caseStudy = document.getElementById('case-study-math-tutor');
+                if (caseStudy) {
+                    caseStudy.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    
+                    // Highlight the case study
+                    caseStudy.classList.add('highlight-pulse-purple');
+                    setTimeout(() => {
+                        caseStudy.classList.remove('highlight-pulse-purple');
+                    }, 3000);
+                    
+                    // Flash jargon terms inside it
+                    const terms = caseStudy.querySelectorAll('.jargon-term');
+                    terms.forEach(term => {
+                        term.style.outline = '2.5px solid var(--pastel-purple-text)';
+                        term.style.outlineOffset = '2.5px';
+                        term.style.borderRadius = '4px';
+                        setTimeout(() => {
+                            term.style.outline = 'none';
+                        }, 3000);
+                    });
+                }
+            });
+        }
+        
+        // 3. Contact Intent B.S. Filter Showcase Tour
+        if (btnFilter) {
+            btnFilter.addEventListener('click', () => {
+                const contactSection = document.getElementById('contact');
+                const contactWrapper = document.querySelector('.contact-form-wrapper');
+                const formName = document.getElementById('form-name');
+                const tooltipContainer = document.getElementById('contact-tooltip-container');
+                const helpBtn = document.getElementById('contact-help-btn');
+                
+                if (contactSection) {
+                    contactSection.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    
+                    if (contactWrapper) {
+                        contactWrapper.classList.add('highlight-pulse-sky');
+                        setTimeout(() => {
+                            contactWrapper.classList.remove('highlight-pulse-sky');
+                        }, 3000);
+                    }
+                    
+                    // Focus name input to trigger model preloading automatically
+                    if (formName) {
+                        setTimeout(() => {
+                            formName.focus();
+                        }, 800); // Wait for scroll to end
+                    }
+                    
+                    // Open intent filter help tooltip
+                    if (tooltipContainer && helpBtn) {
+                        tooltipContainer.classList.add('active');
+                        helpBtn.setAttribute('aria-expanded', 'true');
+                    }
+                }
+            });
+        }
+    };
+    
+    initEdgeShowcaseTour();
 
 });

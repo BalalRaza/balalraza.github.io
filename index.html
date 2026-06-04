@@ -172,6 +172,25 @@
                         <div id="search-results" class="search-results-container" style="display: none;"></div>
                     </div>
 
+                    <!-- Edge AI Features Showcase Strip -->
+                    <div class="edge-features-strip">
+                        <span class="strip-label">⚡ Local Edge-AI:</span>
+                        <div class="strip-items">
+                            <button type="button" class="strip-item" id="btn-showcase-search" title="Showcase Semantic Search">
+                                <span class="strip-dot"></span>
+                                RAG Search
+                            </button>
+                            <button type="button" class="strip-item" id="btn-showcase-jargon" title="Showcase Jargon Decoder">
+                                <span class="strip-dot"></span>
+                                Jargon Decoder
+                            </button>
+                            <button type="button" class="strip-item" id="btn-showcase-filter" title="Showcase B.S. Filter">
+                                <span class="strip-dot"></span>
+                                Contact B.S. Filter
+                            </button>
+                        </div>
+                    </div>
+
                     <div class="hero-socials">
                         <a href="tel:+918910966921" class="social-link" title="Phone">
                             <svg viewBox="0 0 24 24" width="22" height="22" stroke="currentColor" stroke-width="2"
@@ -522,9 +541,36 @@
                 <div class="contact-grid">
                     <!-- Contact Form: Technical Consultation -->
                     <div class="contact-form-wrapper">
-                        <div class="schedule-card-header" style="margin-bottom: 24px;">
-                            <span class="schedule-badge badge-blue">Direct Mail</span>
-                            <h3 class="schedule-card-title">Technical Consultation</h3>
+                        <div class="schedule-card-header" style="margin-bottom: 24px; position: relative;">
+                            <div class="contact-header-badges">
+                                <span class="schedule-badge badge-blue">Direct Mail</span>
+                                <div class="contact-status-wrapper">
+                                    <div class="contact-status-badge" id="contact-status-badge">
+                                        <span class="status-dot"></span>
+                                        <span class="status-text">B.S. Intent Filter Standby</span>
+                                    </div>
+                                    <button type="button" class="contact-help-btn" id="contact-help-btn" aria-label="Intent Filter Info" aria-expanded="false">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24"
+                                            fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"
+                                            stroke-linejoin="round" class="help-icon">
+                                            <circle cx="12" cy="12" r="10"></circle>
+                                            <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path>
+                                            <line x1="12" y1="17" x2="12.01" y2="17"></line>
+                                        </svg>
+                                    </button>
+                                </div>
+                            </div>
+                            <h3 class="schedule-card-title" style="margin-top: 12px;">Technical Consultation</h3>
+                            
+                            <!-- Contact Help Tooltip Container -->
+                            <div class="contact-tooltip-container" id="contact-tooltip-container">
+                                <div class="contact-tooltip-arrow"></div>
+                                <h4 class="contact-tooltip-title">Edge AI Intent Filter (B.S. Filter)</h4>
+                                <p class="contact-tooltip-text">
+                                    Runs a lightweight <span class="jargon-term">MobileBERT</span> language model completely in your browser via <span class="jargon-term">Transformers.js</span>. 
+                                    As you type a message, it detects intent in real-time, labeling it as high-value, outreach, or spam. Zero data leaves your device.
+                                </p>
+                            </div>
                         </div>
                         <form id="contact-form" class="contact-form" novalidate>
                             <div class="form-group">
