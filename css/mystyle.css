@@ -2299,6 +2299,7 @@ html[data-theme="dark"] .theme-toggle .moon-icon {
 /* Collapsed State Styles */
 .telemetry-wrapper.collapsed {
     width: 48px;
+    height: 48px;
     max-width: 48px;
     left: calc(100% - 44px);
     transform: translateX(-100%);
@@ -2311,9 +2312,20 @@ html[data-theme="dark"] .theme-toggle .moon-icon {
 }
 
 .telemetry-wrapper.collapsed .telemetry-container {
-    padding: 12px;
+    width: 48px;
+    height: 48px;
+    padding: 0;
     justify-content: center;
     border-radius: 50%;
+    overflow: visible; /* Prevents green status dot from being clipped */
+    background: var(--bg-secondary);
+    border: 1.5px solid var(--border-color);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.16), 0 2px 6px rgba(0, 0, 0, 0.08);
+}
+
+.telemetry-wrapper.collapsed .telemetry-container:hover {
+    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.24);
+    border-color: var(--text-secondary);
 }
 
 .telemetry-wrapper.collapsed .telemetry-metrics {
@@ -2329,10 +2341,12 @@ html[data-theme="dark"] .theme-toggle .moon-icon {
 
 .telemetry-wrapper.collapsed .telemetry-status-dot {
     position: absolute;
-    top: 4px;
-    right: 4px;
-    width: 8px;
-    height: 8px;
+    top: 1px;
+    right: 1px;
+    width: 10px;
+    height: 10px;
+    border: 2px solid var(--bg-secondary);
+    box-sizing: content-box;
 }
 
 /* Animations */
