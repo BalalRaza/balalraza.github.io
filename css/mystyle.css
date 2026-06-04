@@ -2816,6 +2816,8 @@ html[data-theme="dark"] .search-tooltip-container {
 /* Jargon Tooltip Container */
 #jargon-tooltip {
     position: absolute;
+    top: 0;
+    left: 0;
     z-index: 1000;
     max-width: 320px;
     width: calc(100vw - 32px);
@@ -2834,6 +2836,11 @@ html[data-theme="dark"] .search-tooltip-container {
     pointer-events: none;
     backdrop-filter: blur(20px) saturate(180%);
     -webkit-backdrop-filter: blur(20px) saturate(180%);
+}
+
+#jargon-tooltip.tooltip-hidden {
+    top: 0 !important;
+    left: 0 !important;
 }
 
 html[data-theme="dark"] #jargon-tooltip {
